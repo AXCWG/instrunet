@@ -2,12 +2,8 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.bundle'
 import 'bootstrap-icons/font/bootstrap-icons.css'
+import {useState} from "react";
 
-async function UploadEntry(formData) {
-
-
-    await formData.get("file").arrayBuffer()
-}
 
 function Navbar() {
     return (<nav className="navbar fixed-top navbar-expand-sm bg-dark navbar-dark">
@@ -35,6 +31,36 @@ function Navbar() {
 }
 
 function App() {
+    const [form, setForm] = useState({
+        name: "",
+        albumName: "",
+        link: "",
+        file: {},
+    })
+
+    async function UploadEntry() {
+
+        const reader = new FileReader();
+        reader.readAsDataURL(form.file);
+        reader.onload = async () => {
+            var prep = {
+                name: form.name,
+                albumName: form.albumName,
+                link: form.link,
+                file: reader.result,
+            }
+            await fetch("http://localhost:8080/submit", {
+                method: 'POST',
+                body: JSON.stringify(prep),
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+
+
+            })
+        }
+    }
+
     return (<>
         <Navbar/>
         <div className="container mt-5 ">
@@ -61,13 +87,38 @@ function App() {
                 <div className={"h6"}>不会太久。</div>
             </div>
             <div className={"row mt-5  justify-content-center "} style={{marginBottom: "90px"}}>
-                <form className={" px-0"} style={{width: '80%'}} action={UploadEntry}>
-                    <input className={" mb-3 form-control"} placeholder={"曲目名"} name={"name"}/>
-                    <input className={"  mb-3 form-control"} placeholder={"所属专辑名"} name={"albumName"}/>
-                    <input className={" mb-3 form-control"}
+                <form className={" px-0"} style={{width: '80%'}}>
+                    <input value={form.name} onChange={(obj) => {
+                        setForm({
+                            ...form,
+                            name: obj.target.value,
+                        });
+                    }} className={" mb-3 form-control"} placeholder={"曲目名"} name={"name"}/>
+                    <input onChange={(obj) => {
+                        setForm(
+                            {
+                                ...form,
+                                albumName: obj.target.value
+                            }
+                        );
+                    }} value={form.albumName} className={"  mb-3 form-control"} placeholder={"所属专辑名"}
+                           name={"albumName"}/>
+                    <input onChange={(obj) => {
+                        setForm({
+                            ...form,
+                            link: obj.target.value
+                        })
+                    }} value={form.link} className={" mb-3 form-control"}
                            placeholder={"（如果可能的话）其他音乐元数据刮削网站链接"} name={"link"}/>
-                    <input className={"mb-3 form-control"} type={"file"} name={"file"}></input>
-                    <button className={"btn btn-primary mb-3 w-100"}><i className={"bi-upload"}></i> 上传</button>
+                    <input onChange={(obj) => {
+                        setForm({
+                            ...form,
+                            file: obj.target.files[0]
+                        })
+                    }} className={"mb-3 form-control"} type={"file"} name={"file"}></input>
+                    <button className={"btn btn-primary mb-3 w-100"} onClick={UploadEntry} type={"button"}><i
+                        className={"bi-upload"}></i> 上传
+                    </button>
                 </form>
 
 
