@@ -32,33 +32,33 @@ function Navbar() {
 
 function App() {
     const [form, setForm] = useState({
-        name: "",
-        albumName: "",
-        link: "",
-        file: {},
+        name: "", albumName: "", link: "", file: {}, email: ""
     })
+
+    function Prevent(e) {
+        e.preventDefault()
+    }
 
     async function UploadEntry() {
 
-        const reader = new FileReader();
-        reader.readAsDataURL(form.file);
-        reader.onload = async () => {
-            var prep = {
-                name: form.name,
-                albumName: form.albumName,
-                link: form.link,
-                file: reader.result,
-            }
-            await fetch("http://localhost:8080/submit", {
-                method: 'POST',
-                body: JSON.stringify(prep),
-                headers: {
-                    'Content-Type': 'application/json',
+        if (form.name !== "" && form.albumName !== ""  && form.file.toString() !== "[object Object]") {
+            console.log(form.file.toString())
+            const reader = new FileReader();
+            reader.readAsDataURL(form.file);
+            reader.onload = async () => {
+                var prep = {
+                    name: form.name, albumName: form.albumName, link: form.link, file: reader.result, email: form.email,
                 }
+                await fetch("http://localhost:8080/submit", {
+                    method: 'POST', body: JSON.stringify(prep), headers: {
+                        'Content-Type': 'application/json',
+                    }
 
 
-            })
+                })
+            }
         }
+
     }
 
     return (<>
@@ -87,36 +87,37 @@ function App() {
                 <div className={"h6"}>不会太久。</div>
             </div>
             <div className={"row mt-5  justify-content-center "} style={{marginBottom: "90px"}}>
-                <form className={" px-0"} style={{width: '80%'}}>
-                    <input value={form.name} onChange={(obj) => {
+
+                <form className={" px-0"} style={{width: '80%'}} onSubmit={Prevent}>
+                    <input required={true} value={form.name} onChange={(obj) => {
                         setForm({
-                            ...form,
-                            name: obj.target.value,
+                            ...form, name: obj.target.value,
                         });
                     }} className={" mb-3 form-control"} placeholder={"曲目名"} name={"name"}/>
-                    <input onChange={(obj) => {
-                        setForm(
-                            {
-                                ...form,
-                                albumName: obj.target.value
-                            }
-                        );
+                    <input required={true} onChange={(obj) => {
+                        setForm({
+                            ...form, albumName: obj.target.value
+                        });
                     }} value={form.albumName} className={"  mb-3 form-control"} placeholder={"所属专辑名"}
                            name={"albumName"}/>
                     <input onChange={(obj) => {
                         setForm({
-                            ...form,
-                            link: obj.target.value
+                            ...form, link: obj.target.value
                         })
                     }} value={form.link} className={" mb-3 form-control"}
-                           placeholder={"（如果可能的话）其他音乐元数据刮削网站链接"} name={"link"}/>
-                    <input onChange={(obj) => {
+                           placeholder={"（如果可能的话）其他音乐元数据刮削网站链接（可选）"} name={"link"}/>
+                    <input required={true} onChange={(obj) => {
                         setForm({
-                            ...form,
-                            file: obj.target.files[0]
+                            ...form, file: obj.target.files[0]
                         })
                     }} className={"mb-3 form-control"} type={"file"} name={"file"}></input>
-                    <button className={"btn btn-primary mb-3 w-100"} onClick={UploadEntry} type={"button"}><i
+                    <input onChange={(obj) => {
+                        setForm({
+                            ...form, email: obj.target.value
+                        })
+                    }} value={form.email} className={"mb-3 form-control"} placeholder={"邮箱（方便通知何时完毕，可选）"}
+                    />
+                    <button className={"btn btn-primary mb-3 w-100"} type={"submit"} onClick={UploadEntry}><i
                         className={"bi-upload"}></i> 上传
                     </button>
                 </form>
