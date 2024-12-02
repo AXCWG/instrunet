@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "伴奏网 InstruNet",
+  "name": "全国唯一免费的伴奏分享平台",
   "icons": [
     {
       "src": "favicon.ico",
