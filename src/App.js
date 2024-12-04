@@ -34,6 +34,7 @@ function App() {
     const [form, setForm] = useState({
         name: "", albumName: "", link: "", file: {}, email: ""
     })
+    const [loading, setLoading] = useState(false);
 
     function Prevent(e) {
         e.preventDefault()
@@ -41,7 +42,8 @@ function App() {
 
     async function UploadEntry() {
 
-        if (form.name !== "" && form.albumName !== ""  && form.file.toString() !== "[object Object]") {
+        if (form.name !== "" && form.albumName !== "" && form.file.toString() !== "[object Object]") {
+            setLoading(true);
             console.log(form.file.toString())
             const reader = new FileReader();
             reader.readAsDataURL(form.file);
@@ -49,13 +51,27 @@ function App() {
                 var prep = {
                     name: form.name, albumName: form.albumName, link: form.link, file: reader.result, email: form.email,
                 }
-                await fetch("http://localhost:8080/submit", {
+
+                var res = await fetch("http://localhost:8080/submit", {
                     method: 'POST', body: JSON.stringify(prep), headers: {
                         'Content-Type': 'application/json',
                     }
 
 
+                }).catch((e) => {
+                    console.log(e)
+                    setLoading(false);
                 })
+                if(res !== undefined){
+                    if (!res.ok) {
+                        alert("Media type not supported!")
+                        setLoading(false);
+                    }else{
+                        alert("Complete. ")
+                        setLoading(false);
+                    }
+                }
+
             }
         }
 
@@ -89,6 +105,7 @@ function App() {
             <div className={"row mt-5  justify-content-center "} style={{marginBottom: "90px"}}>
 
                 <form className={" px-0"} style={{width: '80%'}} onSubmit={Prevent}>
+                    <div className={"spinner-border"} style={{visibility: loading ? "visible" : "collapse"}}></div>
                     <input required={true} value={form.name} onChange={(obj) => {
                         setForm({
                             ...form, name: obj.target.value,
@@ -110,7 +127,7 @@ function App() {
                         setForm({
                             ...form, file: obj.target.files[0]
                         })
-                    }} className={"mb-3 form-control"} type={"file"} name={"file"}></input>
+                    }} className={"mb-3 form-control"} type={"file"} name={"file"} accept={"audio/*"}></input>
                     <input onChange={(obj) => {
                         setForm({
                             ...form, email: obj.target.value
