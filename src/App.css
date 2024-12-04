@@ -1,0 +1,11 @@
+.card:hover {
+    scale: 1.01;
+    z-index: 999;
+}
+.card{
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    transition: all 0.2s ease-out;
+    user-select: none;
+}
