@@ -4,7 +4,7 @@ import 'bootstrap/dist/js/bootstrap.bundle'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import {useState} from "react";
 
-const baseUrl = "http://localhost:8080";
+const baseUrl = "http://192.168.1.166:8080";
 
 function Navbar() {
     return (<nav className="navbar fixed-top navbar-expand-sm bg-dark navbar-dark">
