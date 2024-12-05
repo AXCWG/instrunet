@@ -21,11 +21,9 @@ function Search() {
                 <div className={"display-1"}>
                     搜索结果：{p === ""||p===null ? "全部" : p}
                 </div>
-                <div className={"mt-5"}>
+                <div className={"mt-5 row"}>
                     {
                         got_data.map((data) => {
-
-                            console.log(data.uuid)
                             if(
                                 data.song_name === "Test Song"
 
@@ -33,25 +31,26 @@ function Search() {
                                 return null
                             }else{
                                 return (
+                                    <div className={"col-lg-6 mb-3"}>
+                                        <div className={"card"} style={{width: "100%"}} onClick={async (e) => {
 
-                                    <div className={"card"} style={{width: "100%"}} onClick={async (e) => {
-
-                                        const link = document.createElement("a");
-                                        link.href = "http://andyxie.cn:8201/"+data.uuid;
-                                        document.body.appendChild(link);
-                                        link.click();
-                                        document.body.removeChild(link);
+                                            const link = document.createElement("a");
+                                            link.href = "http://andyxie.cn:8201/" + data.uuid;
+                                            document.body.appendChild(link);
+                                            link.click();
+                                            document.body.removeChild(link);
 
 
-                                    }}>
-                                        <div className={"card-body"}>
-                                            <div className={"display-6"}>
-                                                {data.song_name}
+                                        }}>
+                                            <div className={"card-body"}>
+                                                <div className={"display-6"}>
+                                                    {data.song_name}
 
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className={"card-footer"}>
-                                            {data.artist} - {data.album_name}
+                                            <div className={"card-footer"}>
+                                                {data.artist} - {data.album_name}
+                                            </div>
                                         </div>
                                     </div>
 

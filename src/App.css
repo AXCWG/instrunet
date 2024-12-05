@@ -1,11 +1,11 @@
 .card:hover {
-    scale: 1.01;
+    scale: 1.05;
     z-index: 999;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.11);
 }
 .card{
-    margin-left: 5px;
-    margin-right: 5px;
-    margin-bottom: 5px;
-    transition: all 0.2s ease-out;
+
+
+    transition: all 0.1s ease-out;
     user-select: none;
 }

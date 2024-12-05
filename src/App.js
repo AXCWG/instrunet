@@ -91,12 +91,12 @@ function App() {
     return (<>
 
             <div className="container mt-5 ">
-                <div style={{height: '80vh', display: "flex", justifyContent: "center", flexDirection: "column"}}>
+                <div style={{height: '81vh', display: "flex", justifyContent: "center", flexDirection: "column"}}>
                     <div className="row">
-                        <div className={"display-1 text-lg-center mt-5"}>
+                        <div className={"display-1 text-lg-center mt-5"} style={{userSelect: "none"}}>
                             伴奏网
                         </div>
-                        <span className={"text-lg-center "}>AI支持的，免费的伴奏分享网站</span>
+                        <span className={"text-lg-center user-select-none " } style={{fontSize: ".9rem"}}>AI支持的，免费无登录的伴奏分享网站</span>
                     </div>
                     <div className={"row mt-5 "}>
                         <form className={"d-flex w-100"} onSubmit={Prevent}>
@@ -115,7 +115,7 @@ function App() {
                     </div>
 
                 </div>
-                <div className={"mt-5 text-center"}>找不到你想要的？</div>
+                <div className={"mt-5 text-center text-secondary text-decoration-underline"}>找不到你想要的？</div>
                 <div className={"row mt-5"}>
                     <div className={"display-4"}>为社区做一点贡献：</div>
                     <div className={"h5 mt-3 "}>别担心，你只需要提供歌曲的源文件和元数据即可。</div>
@@ -161,6 +161,19 @@ function App() {
                         }} value={form.email} className={"mb-3 form-control"}
                                placeholder={"邮箱（方便通知何时完毕，可选）"}
                         />
+                        <div className={"row mb-3"}>
+                            <div className={"col-lg-2 w-auto"}>
+                                <div style={{display: "flex", justifyContent: "space-between"}}>
+                                    <input className={" form-check"} type={"checkbox"} id={"karaoke_check"}/>
+                                    <label htmlFor={"karaoke_check"} className={"form-check-label mx-2"}>
+
+                                        保留和声
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
+
 
                         <button className={"btn btn-primary mb-3 w-100"} type={"submit"} onClick={UploadEntry}
                                 disabled={loading}><i

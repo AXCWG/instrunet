@@ -3,18 +3,18 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App, {Navbar} from './App';
 import reportWebVitals from './reportWebVitals';
-import {HashRouter, Route, Routes} from "react-router-dom";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Search from "./Search";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-    <HashRouter>
+    <BrowserRouter>
         <Navbar/>
         <Routes>
             <Route path="/" element={<App />}  />
             <Route path="/search" element={<Search />} />
         </Routes>
-    </HashRouter>
+    </BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function
