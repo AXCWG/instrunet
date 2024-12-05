@@ -4,7 +4,7 @@ import 'bootstrap/dist/js/bootstrap.bundle'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import {useState} from "react";
 
-const baseUrl = "http://192.168.1.166:8080";
+const baseUrl = "https://andyxie.cn:8200";
 
 function Navbar() {
     return (<nav className="navbar fixed-top navbar-expand-sm bg-dark navbar-dark">
@@ -20,10 +20,10 @@ function Navbar() {
                         <a className="nav-link" href="/">主页</a>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link" href="/singers">歌手</a>
+                        <a className="nav-link" href="/search">全部</a>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link" href="/application">申请</a>
+                        <a className="nav-link" href="mailto:xiey0@qq.com">有事请联系xiey0@qq.com</a>
                     </li>
                 </ul>
             </div>
@@ -42,7 +42,7 @@ function App() {
     }
 
     function searchGeneral() {
-        window.location.href = "/search?p="+searchParam;
+        window.location.href = "/search?p=" + searchParam;
     }
 
     async function UploadEntry() {
@@ -54,7 +54,12 @@ function App() {
             reader.readAsDataURL(form.file);
             reader.onload = async () => {
                 var prep = {
-                    name: form.name, albumName: form.albumName, link: form.link, file: reader.result, email: form.email,artist: form.artist
+                    name: form.name,
+                    albumName: form.albumName,
+                    link: form.link,
+                    file: reader.result,
+                    email: form.email,
+                    artist: form.artist
                 }
 
                 var res = await fetch(baseUrl + "/submit", {
@@ -69,11 +74,11 @@ function App() {
                 })
                 if (res !== undefined) {
                     if (!res.ok) {
-                        alert("Media type not supported!")
                         setLoading(false);
+                        alert("媒体格式不支持")
                     } else {
-                        alert("Complete. ")
                         setLoading(false);
+                        alert("完成：它会在一小会之后出现在数据库中。")
                     }
                 }
 
@@ -81,6 +86,7 @@ function App() {
         }
 
     }
+
     const [searchParam, setSearchParam] = useState("")
     return (<>
             <Navbar/>
@@ -90,29 +96,31 @@ function App() {
                         <div className={"display-1 text-lg-center mt-5"}>
                             伴奏网
                         </div>
-                        <span className={"text-lg-center "}>免费的伴奏分享网站</span>
+                        <span className={"text-lg-center "}>AI支持的，免费的伴奏分享网站</span>
                     </div>
                     <div className={"row mt-5 "}>
                         <form className={"d-flex w-100"} onSubmit={Prevent}>
-                            <input className={"form-control me-2"} type={"text"} placeholder={"搜索"} onChange={(e)=>{
+                            <input className={"form-control me-2"} type={"text"} placeholder={"搜索"} onChange={(e) => {
                                 setSearchParam(e.target.value);
-                            }} value={searchParam} onKeyDown={(e)=>{
-                                if(e.key === "Enter"){
+                            }} value={searchParam} onKeyDown={(e) => {
+                                if (e.key === "Enter") {
                                     searchGeneral();
                                 }
-                            }} />
-                            <button type="button" className="btn btn-primary" onClick={searchGeneral}><i className={"bi bi-search"}></i>
+                            }}/>
+                            <button type="button" className="btn btn-primary" onClick={searchGeneral}><i
+                                className={"bi bi-search"}></i>
                             </button>
                         </form>
 
                     </div>
 
                 </div>
-                <div className={"mt-5 text-center"}>或者……</div>
+                <div className={"mt-5 text-center"}>找不到你想要的？</div>
                 <div className={"row mt-5"}>
                     <div className={"display-4"}>为社区做一点贡献：</div>
                     <div className={"h5 mt-3 "}>别担心，你只需要提供歌曲的源文件和元数据即可。</div>
                     <div className={"h6"}>不会太久。</div>
+                    <h6>全程大概6分钟左右。</h6>
                 </div>
                 <div className={"row mt-5  justify-content-center "} style={{marginBottom: "90px"}}>
 
@@ -154,7 +162,8 @@ function App() {
                                placeholder={"邮箱（方便通知何时完毕，可选）"}
                         />
 
-                        <button className={"btn btn-primary mb-3 w-100"} type={"submit"} onClick={UploadEntry}><i
+                        <button className={"btn btn-primary mb-3 w-100"} type={"submit"} onClick={UploadEntry}
+                                disabled={loading}><i
                             className={"bi-upload"}></i> 上传
                         </button>
                     </form>
