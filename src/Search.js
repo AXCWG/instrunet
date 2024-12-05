@@ -1,4 +1,3 @@
-import {Navbar} from "./App";
 import './App.css'
 
 const baseUrl = "https://andyxie.cn:8200";
@@ -16,7 +15,7 @@ function Search() {
 
     return (
         <>
-            <Navbar/>
+
             <div className="container" style={{marginTop: "5rem"}}>
 
                 <div className={"display-1"}>

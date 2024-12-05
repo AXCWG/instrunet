@@ -9,7 +9,7 @@ const baseUrl = "https://andyxie.cn:8200";
 function Navbar() {
     return (<nav className="navbar fixed-top navbar-expand-sm bg-dark navbar-dark">
         <div className="container-fluid">
-            <a className="navbar-brand" href="/">伴奏网</a>
+            <a className="navbar-brand" href="/instrunet">伴奏网</a>
             <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#collapsibleNavbar">
                 <span className="navbar-toggler-icon"></span>
@@ -17,10 +17,10 @@ function Navbar() {
             <div className="collapse navbar-collapse" id="collapsibleNavbar">
                 <ul className="navbar-nav">
                     <li className="nav-item">
-                        <a className="nav-link" href="/">主页</a>
+                        <a className="nav-link" href="/instrunet">主页</a>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link" href="/search">全部</a>
+                        <a className="nav-link" href="/instrunet/#/search">全部</a>
                     </li>
                     <li className="nav-item">
                         <a className="nav-link" href="mailto:xiey0@qq.com">有事请联系xiey0@qq.com</a>
@@ -42,7 +42,7 @@ function App() {
     }
 
     function searchGeneral() {
-        window.location.href = "/search?p=" + searchParam;
+        window.location.href = "/instrunet/#/search?p=" + searchParam;
     }
 
     async function UploadEntry() {
@@ -89,7 +89,7 @@ function App() {
 
     const [searchParam, setSearchParam] = useState("")
     return (<>
-            <Navbar/>
+
             <div className="container mt-5 ">
                 <div style={{height: '80vh', display: "flex", justifyContent: "center", flexDirection: "column"}}>
                     <div className="row">

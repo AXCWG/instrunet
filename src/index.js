@@ -1,14 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
+import App, {Navbar} from './App';
 import reportWebVitals from './reportWebVitals';
-import {BrowserRouter, HashRouter, Route, Router, Routes} from "react-router-dom";
+import {HashRouter, Route, Routes} from "react-router-dom";
 import Search from "./Search";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <HashRouter>
+        <Navbar/>
         <Routes>
             <Route path="/" element={<App />}  />
             <Route path="/search" element={<Search />} />
