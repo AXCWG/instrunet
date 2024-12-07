@@ -2,7 +2,7 @@ Specification 1.0 for InstruNet
 
 - DB
 	Column: 
-		id - Current ID for the entry
+		id - Current ID for the entry // Removed for redundancy -- Dec 6 24
 		uuid - Unique ID per entry
 		song_name - Stands for the name of the song of the entry
 		album_name - Stands for the name of the album of the entry

@@ -163,8 +163,8 @@ function App() {
                         />
                         <div className={"row mb-3"}>
                             <div className={"col-lg-2 w-auto"}>
-                                <div style={{display: "flex", justifyContent: "space-between"}}>
-                                    <input className={" form-check"} type={"checkbox"} id={"karaoke_check"}/>
+                                <div style={{display: "flex", justifyContent: "space-between"}} >
+                                    <input className={" form-check"} type={"checkbox"} id={"karaoke_check"} disabled={true}/>
                                     <label htmlFor={"karaoke_check"} className={"form-check-label mx-2"}>
 
                                         保留和声
