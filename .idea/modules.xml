@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/inst.iml" filepath="$PROJECT_DIR$/.idea/inst.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../instrunet_backend/.idea/instrunet_backend.iml" filepath="$PROJECT_DIR$/../instrunet_backend/.idea/instrunet_backend.iml" />
     </modules>
   </component>
 </project>

@@ -107,7 +107,8 @@ function App() {
                         <div className={"display-1 text-lg-center mt-5"} style={{userSelect: "none"}}>
                             伴奏网
                         </div>
-                        <span className={"text-lg-center user-select-none " } style={{fontSize: ".9rem"}}>AI支持的，免费无登录的伴奏分享网站</span>
+                        <span className={"text-lg-center user-select-none "}
+                              style={{fontSize: ".9rem"}}>AI支持的，免费无登录的伴奏分享网站</span>
                     </div>
                     <div className={"row mt-5 "}>
                         <form className={"d-flex w-100"} onSubmit={Prevent}>
@@ -174,19 +175,18 @@ function App() {
                         />
                         <div className={"row mb-3"}>
                             <div className={"col-lg-2 w-auto"}>
-                                <div style={{display: "flex", justifyContent: "space-between"}} >
-                                    <select name={"mode"} onChange={(e)=>{
-                                        console.log(e.target.value)
+                                <div style={{display: "flex", justifyContent: "space-between"}}>
+                                    <select name={"mode"} onChange={ (e) => {
                                         setForm({
-                                            ...form, mode: e.target.value,
+                                            ...form, kind: Number.parseInt(e.target.value)
                                         })
+
+
+
                                     }} className={"form-control form-select"} style={{userSelect: "none"}}>
                                         <option value={0}>{Kind["0"]}</option>
                                         <option value={1}>{Kind["1"]}</option>
-                                        <option value={2}>{Kind["2"]}</option>
-                                        <option value={3}>{Kind["3"]}</option>
-                                        <option value={4}>{Kind["4"]}</option>
-                                        <option value={5}>{Kind["5"]}</option>
+
                                     </select>
                                 </div>
                             </div>
@@ -194,7 +194,12 @@ function App() {
                         </div>
 
 
-                        <button className={"btn btn-primary mb-3 w-100"} type={"submit"} onClick={UploadEntry}
+                        <button className={"btn btn-primary mb-3 w-100"} type={"submit"} onClick={
+                           UploadEntry
+                           //  (e)=>{
+                           //      console.log(form)
+                           //  }
+                        }
                                 disabled={loading}><i
                             className={"bi-upload"}></i> 上传
                         </button>
