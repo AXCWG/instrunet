@@ -1,6 +1,6 @@
 import './App.css'
 
-const baseUrl = "http://localhost:8080";
+const baseUrl = "https://andyxie.cn:8200";
 const queryParams = new URLSearchParams(window.location.search);
 const p = queryParams.get("p");
 let got_data = await (await fetch(baseUrl + "/search_api", {
