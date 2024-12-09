@@ -6,6 +6,15 @@ import {useState} from "react";
 
 const baseUrl = "https://andyxie.cn:8200";
 
+const Kind = {
+    0: "去和声伴奏",
+    1: "和声伴奏",
+    2: "人声",
+    3: "贝斯",
+    4: "鼓",
+    5: "其他",
+}
+
 function Navbar() {
     return (<nav className="navbar fixed-top navbar-expand-sm bg-dark navbar-dark">
         <div className="container-fluid">
@@ -33,7 +42,7 @@ function Navbar() {
 
 function App() {
     const [form, setForm] = useState({
-        name: "", albumName: "", link: "", file: {}, email: "", artist: ""
+        name: "", albumName: "", link: "", file: {}, email: "", artist: "", kind: 0
     })
     const [loading, setLoading] = useState(false);
 
@@ -59,7 +68,9 @@ function App() {
                     link: form.link,
                     file: reader.result,
                     email: form.email,
-                    artist: form.artist
+                    artist: form.artist,
+                    kind: form.kind
+
                 }
 
                 var res = await fetch(baseUrl + "/submit", {
@@ -164,11 +175,19 @@ function App() {
                         <div className={"row mb-3"}>
                             <div className={"col-lg-2 w-auto"}>
                                 <div style={{display: "flex", justifyContent: "space-between"}} >
-                                    <input className={" form-check"} type={"checkbox"} id={"karaoke_check"} disabled={true}/>
-                                    <label htmlFor={"karaoke_check"} className={"form-check-label mx-2"}>
-
-                                        保留和声
-                                    </label>
+                                    <select name={"mode"} onChange={(e)=>{
+                                        console.log(e.target.value)
+                                        setForm({
+                                            ...form, mode: e.target.value,
+                                        })
+                                    }} className={"form-control form-select"} style={{userSelect: "none"}}>
+                                        <option value={0}>{Kind["0"]}</option>
+                                        <option value={1}>{Kind["1"]}</option>
+                                        <option value={2}>{Kind["2"]}</option>
+                                        <option value={3}>{Kind["3"]}</option>
+                                        <option value={4}>{Kind["4"]}</option>
+                                        <option value={5}>{Kind["5"]}</option>
+                                    </select>
                                 </div>
                             </div>
 
