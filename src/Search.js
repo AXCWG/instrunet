@@ -18,6 +18,27 @@ const Kind = {
     5: "其他",
 }
 
+function Cards({data}) {
+    return (<div className={"col-lg-6 mb-3"} key={data.uuid}>
+        <div className={"card"} style={{width: "100%"}} onClick={(e) => {
+            const link = document.createElement("a");
+            link.href = "http://andyxie.cn:8201/" + data.uuid;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }}>
+            <div className={"card-body"}>
+                <div className={"display-6"}>
+                    {data.song_name}
+
+                </div>
+            </div>
+            <div className={"card-footer"}>
+                {data.artist} - {data.album_name} - {Kind[data.kind]}
+            </div>
+        </div>
+    </div>)
+}
 
 function Search() {
     const [selected, setSelected] = useState({
@@ -54,54 +75,18 @@ function Search() {
                             ) {
                                 return null
                             }
-                            if(selected["0"] === true){
-                                if(data.kind===0){
+                            if (selected["0"] === true) {
+                                if (data.kind === 0) {
                                     return (
-                                        <div className={"col-lg-6 mb-3"} key={data.uuid}>
-                                            <div className={"card"} style={{width: "100%"}} onClick={(e) => {
-                                                const link = document.createElement("a");
-                                                link.href = "http://andyxie.cn:8201/" + data.uuid;
-                                                document.body.appendChild(link);
-                                                link.click();
-                                                document.body.removeChild(link);
-                                            }}>
-                                                <div className={"card-body"}>
-                                                    <div className={"display-6"}>
-                                                        {data.song_name}
-
-                                                    </div>
-                                                </div>
-                                                <div className={"card-footer"}>
-                                                    {data.artist} - {data.album_name} - {Kind[data.kind]}
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <Cards data={data}/>
                                     )
                                 }
 
                             }
-                            if(selected["1"] === true){
-                                if(data.kind===1){
+                            if (selected["1"] === true) {
+                                if (data.kind === 1) {
                                     return (
-                                        <div className={"col-lg-6 mb-3"} key={data.uuid}>
-                                            <div className={"card"} style={{width: "100%"}} onClick={(e) => {
-                                                const link = document.createElement("a");
-                                                link.href = "http://andyxie.cn:8201/" + data.uuid;
-                                                document.body.appendChild(link);
-                                                link.click();
-                                                document.body.removeChild(link);
-                                            }}>
-                                                <div className={"card-body"}>
-                                                    <div className={"display-6"}>
-                                                        {data.song_name}
-
-                                                    </div>
-                                                </div>
-                                                <div className={"card-footer"}>
-                                                    {data.artist} - {data.album_name} - {Kind[data.kind]}
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <Cards data={data}/>
                                     )
                                 }
                             }
