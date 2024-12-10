@@ -32,8 +32,12 @@ function Navbar() {
                         <a className="nav-link" href="/search">全部</a>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link" href="mailto:xiey0@qq.com">有事请联系xiey0@qq.com</a>
+                        <a className="nav-link" href="mailto:xiey0@qq.com">联系我</a>
                     </li>
+                    <li className={"nav-item"}>
+                        <a className="nav-link" href="http://afdian.com/a/re_xiey0">如果喜欢本站，请考虑打赏哦</a>
+                    </li>
+
                 </ul>
             </div>
         </div>
@@ -89,7 +93,7 @@ function App() {
                         alert("媒体格式不支持")
                     } else {
                         setLoading(false);
-                        alert("完成：它会在一小会之后出现在数据库中。")
+                        alert("上传完成，正在分析，将在5-30分钟内在数据库中出现")
                     }
                 }
 
@@ -127,17 +131,21 @@ function App() {
                     </div>
 
                 </div>
-                <div className={"mt-5 text-center text-secondary text-decoration-underline"}>找不到你想要的？</div>
+                <div className={"mt-5 text-center text-secondary text-decoration-underline"}>本站秉持先搜索，后上传的原则<br></br>找不到你想要的？</div>
                 <div className={"row mt-5"}>
                     <div className={"display-4"}>为社区做一点贡献：</div>
                     <div className={"h5 mt-3 "}>别担心，你只需要提供歌曲的源文件和元数据即可。</div>
                     <div className={"h6"}>不会太久。</div>
-                    <h6>全程大概6分钟左右。</h6>
+                    <h6>全程大概5-30分钟左右。</h6>
                 </div>
                 <div className={"row mt-5  justify-content-center "} style={{marginBottom: "90px"}}>
 
                     <form className={" px-0"} style={{width: '80%'}} onSubmit={Prevent}>
-                        <div className={"spinner-border"} style={{visibility: loading ? "visible" : "collapse"}}></div>
+                        <div style={{visibility: loading ? "visible" : "collapse"}}>
+                            <span className={"spinner-border"}
+                                  ></span><span>正在加载</span>
+
+                        </div>
                         <input required={true} value={form.name} onChange={(obj) => {
                             setForm({
                                 ...form, name: obj.target.value,
