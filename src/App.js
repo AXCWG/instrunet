@@ -153,7 +153,7 @@ function App() {
                                     ...form,
                                     name: data.common.title,
                                     albumName: data.common.album,
-                                    artist: data.common.albumartist === null ? data.common.artist : data.common.albumartist,
+                                    artist: data.common.albumartist === undefined ? data.common.artist : data.common.albumartist,
                                     file: obj.target.files[0]
                                 })
                             })
