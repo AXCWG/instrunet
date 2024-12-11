@@ -22,7 +22,7 @@ function Cards({data}) {
     return (<div className={"col-lg-6 mb-3"} key={data.uuid}>
         <div className={"card"} style={{width: "100%"}} onClick={(e) => {
             const link = document.createElement("a");
-            link.href = "http://andyxie.cn:8201/" + data.uuid;
+            link.href = "https://andyxie.cn:8201/" + data.uuid;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
