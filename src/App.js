@@ -7,12 +7,7 @@ import {useState} from "react";
 const baseUrl = "https://andyxie.cn:8200";
 
 const Kind = {
-    0: "去和声伴奏",
-    1: "和声伴奏",
-    2: "人声",
-    3: "贝斯",
-    4: "鼓",
-    5: "其他",
+    0: "去和声伴奏", 1: "和声伴奏", 2: "人声", 3: "贝斯", 4: "鼓", 5: "其他",
 }
 
 function Navbar() {
@@ -131,7 +126,8 @@ function App() {
                     </div>
 
                 </div>
-                <div className={"mt-5 text-center text-secondary text-decoration-underline"}>本站秉持先搜索，后上传的原则<br></br>找不到你想要的？</div>
+                <div className={"mt-5 text-center text-secondary text-decoration-underline"}>本站秉持先搜索，后上传的原则<br></br>找不到你想要的？
+                </div>
                 <div className={"row mt-5"}>
                     <div className={"display-4"}>为社区做一点贡献：</div>
                     <div className={"h5 mt-3 "}>别担心，你只需要提供歌曲的源文件和元数据即可。</div>
@@ -143,7 +139,7 @@ function App() {
                     <form className={" px-0"} style={{width: '80%'}} onSubmit={Prevent}>
                         <div style={{visibility: loading ? "visible" : "collapse"}}>
                             <span className={"spinner-border"}
-                                  ></span><span>正在加载</span>
+                            ></span><span>正在加载</span>
 
                         </div>
                         <input required={true} value={form.name} onChange={(obj) => {
@@ -161,34 +157,36 @@ function App() {
                             setForm({
                                 ...form, artist: obj.target.value
                             })
-                        }
-                        } placeholder={"歌手名"} className={"mb-3 form-control"} value={form.artist}/>
+                        }} placeholder={"歌手名"} className={"mb-3 form-control"} value={form.artist}/>
                         <input onChange={(obj) => {
                             setForm({
                                 ...form, link: obj.target.value
                             })
                         }} value={form.link} className={" mb-3 form-control"}
-                               placeholder={"（如果可能的话）其他音乐元数据刮削网站链接（可选）"} name={"link"}/>
+                               placeholder={"其他音乐元数据刮削网站链接（可选）"} name={"link"}/>
                         <input required={true} onChange={(obj) => {
                             setForm({
                                 ...form, file: obj.target.files[0]
                             })
                         }} className={"mb-3 form-control"} type={"file"} name={"file"} accept={"audio/*"}></input>
-                        <input onChange={(obj) => {
+                        <input disabled={true} onPointerUp={() => {
+                            alert("未开放")
+
+
+                        }} onChange={(obj) => {
                             setForm({
                                 ...form, email: obj.target.value
                             })
                         }} value={form.email} className={"mb-3 form-control"}
-                               placeholder={"邮箱（方便通知何时完毕，可选）"}
+                               placeholder={"邮箱（通知何时完毕，可选）"}
                         />
                         <div className={"row mb-3"}>
                             <div className={"col-lg-2 w-auto"}>
                                 <div style={{display: "flex", justifyContent: "space-between"}}>
-                                    <select name={"mode"} onChange={ (e) => {
+                                    <select name={"mode"} onChange={(e) => {
                                         setForm({
                                             ...form, kind: Number.parseInt(e.target.value)
                                         })
-
 
 
                                     }} className={"form-control form-select"} style={{userSelect: "none"}}>
@@ -202,12 +200,7 @@ function App() {
                         </div>
 
 
-                        <button className={"btn btn-primary mb-3 w-100"} type={"submit"} onClick={
-                           UploadEntry
-                           //  (e)=>{
-                           //      console.log(form)
-                           //  }
-                        }
+                        <button className={"btn btn-primary mb-3 w-100"} type={"submit"} onClick={UploadEntry}
                                 disabled={loading}><i
                             className={"bi-upload"}></i> 上传
                         </button>
@@ -217,8 +210,7 @@ function App() {
                 </div>
 
             </div>
-        </>
-    );
+        </>);
 }
 
 export default App;
