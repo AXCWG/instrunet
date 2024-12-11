@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.bundle'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import {useState} from "react";
+import {parseBlob} from 'music-metadata'
 
 const baseUrl = "https://andyxie.cn:8200";
 
@@ -98,6 +99,7 @@ function App() {
     }
 
     const [searchParam, setSearchParam] = useState("")
+
     return (<>
 
             <div className="container mt-5 ">
@@ -142,6 +144,23 @@ function App() {
                             ></span><span>正在加载</span>
 
                         </div>
+                        <input required={true} onChange={(obj) => {
+                            parseBlob(obj.target.files[0], {
+                                skipCovers: true,
+
+                            }).then(data => {
+                                setForm({
+                                    ...form,
+                                    name: data.common.title,
+                                    albumName: data.common.album,
+                                    artist: data.common.albumartist === null ? data.common.artist : data.common.albumartist,
+                                    file: obj.target.files[0]
+                                })
+                            })
+
+
+                        }} className={"mb-3 form-control"} type={"file"} name={"file"} accept={"audio/*"}
+                        ></input>
                         <input required={true} value={form.name} onChange={(obj) => {
                             setForm({
                                 ...form, name: obj.target.value,
@@ -158,17 +177,7 @@ function App() {
                                 ...form, artist: obj.target.value
                             })
                         }} placeholder={"歌手名"} className={"mb-3 form-control"} value={form.artist}/>
-                        <input onChange={(obj) => {
-                            setForm({
-                                ...form, link: obj.target.value
-                            })
-                        }} value={form.link} className={" mb-3 form-control"}
-                               placeholder={"其他音乐元数据刮削网站链接（可选）"} name={"link"}/>
-                        <input required={true} onChange={(obj) => {
-                            setForm({
-                                ...form, file: obj.target.files[0]
-                            })
-                        }} className={"mb-3 form-control"} type={"file"} name={"file"} accept={"audio/*"}></input>
+
                         <input disabled={true} onPointerUp={() => {
                             alert("未开放")
 
@@ -200,7 +209,7 @@ function App() {
                         </div>
 
 
-                        <button className={"btn btn-primary mb-3 w-100"} type={"submit"} onClick={UploadEntry}
+                        <button className={"btn btn-primary mb-3 w-100"} type={"submit"}  onClick={UploadEntry}
                                 disabled={loading}><i
                             className={"bi-upload"}></i> 上传
                         </button>
@@ -210,7 +219,7 @@ function App() {
                 </div>
 
             </div>
-        </>);
+    </>);
 }
 
 export default App;
