@@ -6,6 +6,7 @@ import {useState} from "react";
 import {parseBlob} from 'music-metadata'
 
 const baseUrl = "https://andyxie.cn:8200";
+// const baseUrl = "http://localhost:8080";
 
 const Kind = {
     0: "去和声伴奏", 1: "和声伴奏", 2: "人声", 3: "贝斯", 4: "鼓", 5: "其他",
@@ -178,11 +179,7 @@ function App() {
                             })
                         }} placeholder={"歌手名"} className={"mb-3 form-control"} value={form.artist}/>
 
-                        <input disabled={true} onPointerUp={() => {
-                            alert("未开放")
-
-
-                        }} onChange={(obj) => {
+                        <input onChange={(obj) => {
                             setForm({
                                 ...form, email: obj.target.value
                             })
