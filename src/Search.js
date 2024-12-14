@@ -2,6 +2,7 @@ import './App.css'
 import {useState} from "react";
 
 const baseUrl = "https://andyxie.cn:8200";
+// const baseUrl = "http://localhost:8080";
 const queryParams = new URLSearchParams(window.location.search);
 const p = queryParams.get("p");
 let got_data = await (await fetch(baseUrl + "/search_api", {
@@ -21,11 +22,15 @@ const Kind = {
 function Cards({data}) {
     return (<div className={"col-lg-6 mb-3"} key={data.uuid}>
         <div className={"card"} style={{width: "100%"}} onClick={(e) => {
-            const link = document.createElement("a");
-            link.href = "https://andyxie.cn:8201/" + data.uuid;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            //????wtf
+            // const link = document.createElement("a");
+            // link.href = "https://andyxie.cn:8201/" + data.uuid;
+            // document.body.appendChild(link);
+            // link.click();
+            // document.body.removeChild(link);
+            //
+
+            window.location.href = "http://localhost:8079/"
         }}>
             <div className={"card-body"}>
                 <div className={"display-6"}>
