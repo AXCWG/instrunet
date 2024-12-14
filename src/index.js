@@ -5,6 +5,7 @@ import App, {Navbar} from './App';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Search from "./Search";
+import Player from "./Player";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -13,6 +14,7 @@ root.render(
         <Routes>
             <Route path="/" element={<App />}  />
             <Route path="/search" element={<Search />} />
+            <Route path="/player" element={<Player />} />
         </Routes>
     </BrowserRouter>
 );

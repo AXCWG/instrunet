@@ -1,11 +1,9 @@
 import './App.css'
 import {useState} from "react";
-
-const baseUrl = "https://andyxie.cn:8200";
-// const baseUrl = "http://localhost:8080";
+import {baseUrl, fetchUrl} from "./Singletons";
 const queryParams = new URLSearchParams(window.location.search);
 const p = queryParams.get("p");
-let got_data = await (await fetch(baseUrl + "/search_api", {
+let got_data = await (await fetch(baseUrl + "search_api", {
     method: "POST",
     body: JSON.stringify({searchStr: p === null ? "" : p}), headers: {'Content-Type': 'application/json'}
 })).json()
@@ -30,7 +28,7 @@ function Cards({data}) {
             // document.body.removeChild(link);
             //
 
-            window.location.href = "http://localhost:8079/"
+            window.location.href = "/player?play="+data.uuid;
         }}>
             <div className={"card-body"}>
                 <div className={"display-6"}>
