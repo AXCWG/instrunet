@@ -4,12 +4,11 @@ import 'bootstrap/dist/js/bootstrap.bundle'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import {useState} from "react";
 import {parseBlob} from 'music-metadata'
-import {baseUrl} from "./Singletons";
+import {baseUrl, Kind} from "./Singletons";
+
+// TODO Localizations
 
 
-const Kind = {
-    0: "去和声伴奏", 1: "和声伴奏", 2: "人声", 3: "贝斯", 4: "鼓", 5: "其他",
-}
 
 function Navbar() {
     return (<nav className="navbar fixed-top navbar-expand-sm bg-dark navbar-dark">
@@ -73,7 +72,7 @@ function App() {
 
                 }
 
-                var res = await fetch(baseUrl + "/submit", {
+                var res = await fetch(baseUrl + "submit", {
                     method: 'POST', body: JSON.stringify(prep), headers: {
                         'Content-Type': 'application/json',
                     }
@@ -102,119 +101,122 @@ function App() {
 
     return (<>
 
-            <div className="container mt-5 ">
-                <div style={{height: '81vh', display: "flex", justifyContent: "center", flexDirection: "column"}}>
-                    <div className="row">
-                        <div className={"display-1 text-lg-center mt-5"} style={{userSelect: "none"}}>
-                            伴奏网
-                        </div>
-                        <span className={"text-lg-center user-select-none "}
-                              style={{fontSize: ".9rem"}}>AI支持的，免费无登录的伴奏分享网站</span>
+        <div className="container mt-5 ">
+            <div style={{height: '81vh', display: "flex", justifyContent: "center", flexDirection: "column"}}>
+                <div className="row">
+                    <div className={"display-1 text-lg-center mt-5"} style={{userSelect: "none"}}>
+                        伴奏网
                     </div>
-                    <div className={"row mt-5 "}>
-                        <form className={"d-flex w-100"} onSubmit={Prevent}>
-                            <input className={"form-control me-2"} type={"text"} placeholder={"搜索"} onChange={(e) => {
-                                setSearchParam(e.target.value);
-                            }} value={searchParam} onKeyDown={(e) => {
-                                if (e.key === "Enter") {
-                                    searchGeneral();
-                                }
-                            }}/>
-                            <button type="button" className="btn btn-primary" onClick={searchGeneral}><i
-                                className={"bi bi-search"}></i>
-                            </button>
-                        </form>
-
-                    </div>
-
+                    <span className={"text-lg-center user-select-none "}
+                          style={{fontSize: ".9rem"}}>AI支持的，免费无登录的伴奏分享网站</span>
                 </div>
-                <div className={"mt-5 text-center text-secondary text-decoration-underline"}>本站秉持先搜索，后上传的原则<br></br>找不到你想要的？
-                </div>
-                <div className={"row mt-5"}>
-                    <div className={"display-4"}>为社区做一点贡献：</div>
-                    <div className={"h5 mt-3 "}>别担心，你只需要提供歌曲的源文件和元数据即可。</div>
-                    <div className={"h6"}>不会太久。</div>
-                    <h6>全程大概5-30分钟左右。</h6>
-                </div>
-                <div className={"row mt-5  justify-content-center "} style={{marginBottom: "90px"}}>
-
-                    <form className={" px-0"} style={{width: '80%'}} onSubmit={Prevent}>
-                        <div style={{visibility: loading ? "visible" : "collapse"}}>
-                            <span className={"spinner-border"}
-                            ></span><span>正在加载</span>
-
-                        </div>
-                        <input required={true} onChange={(obj) => {
-                            parseBlob(obj.target.files[0], {
-                                skipCovers: true,
-
-                            }).then(data => {
-                                setForm({
-                                    ...form,
-                                    name: data.common.title,
-                                    albumName: data.common.album,
-                                    artist: data.common.albumartist === undefined ? data.common.artist : data.common.albumartist,
-                                    file: obj.target.files[0]
-                                })
-                            })
-
-
-                        }} className={"mb-3 form-control"} type={"file"} name={"file"} accept={"audio/*"}
-                        ></input>
-                        <input required={true} value={form.name} onChange={(obj) => {
-                            setForm({
-                                ...form, name: obj.target.value,
-                            });
-                        }} className={" mb-3 form-control"} placeholder={"曲目名"} name={"name"}/>
-                        <input required={true} onChange={(obj) => {
-                            setForm({
-                                ...form, albumName: obj.target.value
-                            });
-                        }} value={form.albumName} className={"  mb-3 form-control"} placeholder={"所属专辑名"}
-                               name={"albumName"}/>
-                        <input required={true} onChange={(obj) => {
-                            setForm({
-                                ...form, artist: obj.target.value
-                            })
-                        }} placeholder={"歌手名"} className={"mb-3 form-control"} value={form.artist}/>
-
-                        <input onChange={(obj) => {
-                            setForm({
-                                ...form, email: obj.target.value
-                            })
-                        }} value={form.email} className={"mb-3 form-control"}
-                               placeholder={"邮箱（通知何时完毕，可选）"}
-                        />
-                        <div className={"row mb-3"}>
-                            <div className={"col-lg-2 w-auto"}>
-                                <div style={{display: "flex", justifyContent: "space-between"}}>
-                                    <select name={"mode"} onChange={(e) => {
-                                        setForm({
-                                            ...form, kind: Number.parseInt(e.target.value)
-                                        })
-
-
-                                    }} className={"form-control form-select"} style={{userSelect: "none"}}>
-                                        <option value={0}>{Kind["0"]}</option>
-                                        <option value={1}>{Kind["1"]}</option>
-
-                                    </select>
-                                </div>
-                            </div>
-
-                        </div>
-
-
-                        <button className={"btn btn-primary mb-3 w-100"} type={"submit"}  onClick={UploadEntry}
-                                disabled={loading}><i
-                            className={"bi-upload"}></i> 上传
+                <div className={"row mt-5 "}>
+                    <form className={"d-flex w-100"} onSubmit={Prevent}>
+                        <input className={"form-control me-2"} type={"text"} placeholder={"搜索"} onChange={(e) => {
+                            setSearchParam(e.target.value);
+                        }} value={searchParam} onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                searchGeneral();
+                            }
+                        }}/>
+                        <button type="button" className="btn btn-primary" onClick={searchGeneral}><i
+                            className={"bi bi-search"}></i>
                         </button>
                     </form>
-
 
                 </div>
 
             </div>
+            <div
+                className={"mt-5 text-center text-secondary text-decoration-underline"}>本站秉持先搜索，后上传的原则<br></br>找不到你想要的？
+            </div>
+            <div className={"row mt-5"}>
+                <div className={"display-4"}>为社区做一点贡献：</div>
+                <div className={"h5 mt-3 "}>别担心，你只需要提供歌曲的源文件和元数据即可。</div>
+                <div className={"h6"}>不会太久。</div>
+                <h6>全程大概5-30分钟左右。</h6>
+            </div>
+            <div className={"row mt-5  justify-content-center "} style={{marginBottom: "90px"}}>
+
+                <form className={" px-0"} style={{width: '80%'}} onSubmit={Prevent}>
+                    <div style={{visibility: loading ? "visible" : "collapse"}}>
+                            <span className={"spinner-border"}
+                            ></span><span>正在加载</span>
+
+                    </div>
+                    <input required={true} onChange={(obj) => {
+                        parseBlob(obj.target.files[0], {
+                            skipCovers: true,
+
+                        }).then(data => {
+                            setForm({
+                                ...form,
+                                name: data.common.title,
+                                albumName: data.common.album,
+                                artist: data.common.albumartist === undefined
+                                    ? data.common.artist
+                                    : data.common.albumartist,
+                                file: obj.target.files[0]
+                            })
+                        })
+
+
+                    }} className={"mb-3 form-control"} type={"file"} name={"file"} accept={"audio/*"}
+                    ></input>
+                    <input required={true} value={form.name} onChange={(obj) => {
+                        setForm({
+                            ...form, name: obj.target.value,
+                        });
+                    }} className={" mb-3 form-control"} placeholder={"曲目名"} name={"name"}/>
+                    <input required={true} onChange={(obj) => {
+                        setForm({
+                            ...form, albumName: obj.target.value
+                        });
+                    }} value={form.albumName} className={"  mb-3 form-control"} placeholder={"所属专辑名"}
+                           name={"albumName"}/>
+                    <input required={true} onChange={(obj) => {
+                        setForm({
+                            ...form, artist: obj.target.value
+                        })
+                    }} placeholder={"歌手名"} className={"mb-3 form-control"} value={form.artist}/>
+
+                    <input onChange={(obj) => {
+                        setForm({
+                            ...form, email: obj.target.value
+                        })
+                    }} value={form.email} className={"mb-3 form-control"}
+                           placeholder={"邮箱（通知何时完毕，可选）"}
+                    />
+                    <div className={"row mb-3"}>
+                        <div className={"col-lg-2 w-auto"}>
+                            <div style={{display: "flex", justifyContent: "space-between"}}>
+                                <select name={"mode"} onChange={(e) => {
+                                    setForm({
+                                        ...form, kind: Number.parseInt(e.target.value)
+                                    })
+                                }} className={"form-control form-select"} style={{userSelect: "none"}}>
+                                    <option value={0}>{Kind["0"]}</option>
+                                    <option value={1}>{Kind["1"]}</option>
+                                    <option value={3}>{Kind["3"]}</option>
+                                    <option value={4}>{Kind["4"]}</option>
+
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <button className={"btn btn-primary mb-3 w-100"} type={"submit"} onClick={UploadEntry}
+                            disabled={loading}><i
+                        className={"bi-upload"}></i> 上传
+                    </button>
+                </form>
+
+
+            </div>
+
+        </div>
     </>);
 }
 

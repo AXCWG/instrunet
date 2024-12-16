@@ -1,6 +1,7 @@
 import './App.css'
 import {useState} from "react";
-import {baseUrl, fetchUrl} from "./Singletons";
+import {baseUrl, Kind} from "./Singletons";
+
 const queryParams = new URLSearchParams(window.location.search);
 const p = queryParams.get("p");
 let got_data = await (await fetch(baseUrl + "search_api", {
@@ -8,27 +9,12 @@ let got_data = await (await fetch(baseUrl + "search_api", {
     body: JSON.stringify({searchStr: p === null ? "" : p}), headers: {'Content-Type': 'application/json'}
 })).json()
 
-const Kind = {
-    0: "去和声伴奏",
-    1: "和声伴奏",
-    2: "人声",
-    3: "贝斯",
-    4: "鼓",
-    5: "其他",
-}
+
 
 function Cards({data}) {
     return (<div className={"col-lg-6 mb-3"} key={data.uuid}>
         <div className={"card"} style={{width: "100%"}} onClick={(e) => {
-            //????wtf
-            // const link = document.createElement("a");
-            // link.href = "https://andyxie.cn:8201/" + data.uuid;
-            // document.body.appendChild(link);
-            // link.click();
-            // document.body.removeChild(link);
-            //
-
-            window.location.href = "/player?play="+data.uuid;
+            window.location.href = "/player?play=" + data.uuid;
         }}>
             <div className={"card-body"}>
                 <div className={"display-6"}>
@@ -44,9 +30,13 @@ function Cards({data}) {
 }
 
 function Search() {
+
+
     const [selected, setSelected] = useState({
         0: true,
         1: true,
+        3: true,
+        4: true,
     })
     return (
         <>
@@ -66,6 +56,18 @@ function Search() {
                             setSelected({...selected, 1: !selected["1"]});
                         }} type={"checkbox"} id={"1"} className={"form-check-input"}/>
                         <label htmlFor={"1"} style={{userSelect: "none"}}>{Kind["1"]}</label>
+                    </div>
+                    <div>
+                        <input checked={selected["3"]} onChange={(e) => {
+                            setSelected({...selected, 3: !selected["3"]});
+                        }} type={"checkbox"} id={"3"} className={"form-check-input"}/>
+                        <label htmlFor={"3"} style={{userSelect: "none"}}>{Kind["3"]}</label>
+                    </div>
+                    <div>
+                        <input checked={selected["4"]} onChange={(e) => {
+                            setSelected({...selected, 4: !selected["4"]});
+                        }} type={"checkbox"} id={"4"} className={"form-check-input"}/>
+                        <label htmlFor={"4"} style={{userSelect: "none"}}>{Kind["4"]}</label>
                     </div>
 
 
@@ -88,6 +90,20 @@ function Search() {
                             }
                             if (selected["1"] === true) {
                                 if (data.kind === 1) {
+                                    return (
+                                        <Cards data={data}/>
+                                    )
+                                }
+                            }
+                            if (selected["3"] === true) {
+                                if (data.kind === 3) {
+                                    return (
+                                        <Cards data={data}/>
+                                    )
+                                }
+                            }
+                            if (selected["4"] === true) {
+                                if (data.kind === 4) {
                                     return (
                                         <Cards data={data}/>
                                     )
