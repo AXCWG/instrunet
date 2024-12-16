@@ -30,7 +30,10 @@ function Navbar() {
                         <a className="nav-link" href="mailto:xiey0@qq.com">联系我</a>
                     </li>
                     <li className={"nav-item"}>
-                        <a className="nav-link" href="http://afdian.com/a/re_xiey0">如果喜欢本站，请考虑打赏哦</a>
+                        <a className="nav-link" href="https://afdian.com/a/re_xiey0">如果喜欢本站，请考虑打赏哦</a>
+                    </li>
+                    <li className={"nav-item"}>
+                        <a className="nav-link" href="https://github.com/AXCWG/instrunet">Github</a>
                     </li>
 
                 </ul>
@@ -61,7 +64,7 @@ function App() {
             const reader = new FileReader();
             reader.readAsDataURL(form.file);
             reader.onload = async () => {
-                var prep = {
+                let prep = {
                     name: form.name,
                     albumName: form.albumName,
                     link: form.link,
@@ -199,6 +202,7 @@ function App() {
                                     <option value={1}>{Kind["1"]}</option>
                                     <option value={3}>{Kind["3"]}</option>
                                     <option value={4}>{Kind["4"]}</option>
+                                    <option value={0} disabled={true}>更多正在开发中……</option>
 
                                 </select>
                             </div>
