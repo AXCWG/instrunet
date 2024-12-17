@@ -3,11 +3,11 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.bundle'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import {useState} from "react";
-import {parseBlob} from 'music-metadata'
+import {parseBlob, selectCover} from 'music-metadata'
 import {baseUrl, Kind} from "./Singletons";
+import {useCookies} from "react-cookie";
 
 // TODO Localizations
-
 
 
 function Navbar() {
@@ -33,7 +33,7 @@ function Navbar() {
                         <a className="nav-link" href="https://afdian.com/a/re_xiey0">如果喜欢本站，请考虑打赏哦</a>
                     </li>
                     <li className={"nav-item"}>
-                        <a className="nav-link" href="https://github.com/AXCWG/instrunet">Github</a>
+                        <a className="nav-link" href="https://github.com/AXCWG/instrunet">GitHub</a>
                     </li>
 
                 </ul>
@@ -43,9 +43,18 @@ function Navbar() {
 }
 
 function App() {
+    const [cookies, setCookie, removeCookie] = useCookies(['InstruNet'], {doNotParse: true})
     const [form, setForm] = useState({
-        name: "", albumName: "", link: "", file: {}, email: "", artist: "", kind: 0
+        name: "",
+        albumName: "",
+        link: "",
+        file: {},
+        email: cookies["email"],
+        artist: "",
+        kind: 0,
+        albumCover: new ArrayBuffer(0)
     })
+
     const [loading, setLoading] = useState(false);
 
     function Prevent(e) {
@@ -71,11 +80,13 @@ function App() {
                     file: reader.result,
                     email: form.email,
                     artist: form.artist,
-                    kind: form.kind
+                    kind: form.kind,
+                    albumCover: form.albumCover,
+
 
                 }
 
-                var res = await fetch(baseUrl + "submit", {
+                let res = await fetch(baseUrl + "submit", {
                     method: 'POST', body: JSON.stringify(prep), headers: {
                         'Content-Type': 'application/json',
                     }
@@ -88,7 +99,7 @@ function App() {
                 if (res !== undefined) {
                     if (!res.ok) {
                         setLoading(false);
-                        alert("媒体格式不支持")
+                        alert("格式不支持")
                     } else {
                         setLoading(false);
                         alert("上传完成，正在分析，将在5-30分钟内在数据库中出现")
@@ -96,11 +107,14 @@ function App() {
                 }
 
             }
+        } else {
+            alert("格式不正确")
         }
 
     }
 
     const [searchParam, setSearchParam] = useState("")
+
 
     return (<>
 
@@ -147,22 +161,74 @@ function App() {
                             ></span><span>正在加载</span>
 
                     </div>
+
+
+                    <div className={"mb-3"} style={{
+                        borderWidth: ".5px",
+                        borderColor: "black",
+                        borderStyle: "solid",
+                        width: 200,
+                        height: 200,
+                        backgroundSize: "contain"
+                    }} id={"AlbumCover"}>
+                        <input type={"file"} style={{height: "100%", width: "100%", color: "transparent", filter: "opacity(0)"}}
+                               onChange={(e) => {
+                                   document.getElementById("AlbumCover").style.backgroundImage = `url(${URL.createObjectURL(e.target.files[0])})`;
+                                   const reader = new FileReader();
+                                   reader.readAsDataURL(e.target.files[0]);
+
+                                   reader.onload = async () => {
+                                       setForm({
+                                           ...form,
+                                           albumCover: reader.result,
+                                       })
+                                   }
+
+                               }}/>
+
+
+                    </div>
+
                     <input required={true} onChange={(obj) => {
                         parseBlob(obj.target.files[0], {
-                            skipCovers: true,
+                            skipCovers: false,
 
                         }).then(data => {
-                            setForm({
-                                ...form,
-                                name: data.common.title,
-                                albumName: data.common.album,
-                                artist: data.common.albumartist === undefined
-                                    ? data.common.artist
-                                    : data.common.albumartist,
-                                file: obj.target.files[0]
-                            })
-                        })
+                            const reader = new FileReader();
+                            console.log(data)
+                            reader.readAsDataURL(data.common.picture === undefined ? new Blob([]) :  new Blob([selectCover(data.common.picture).data.buffer]))
+                            reader.onload = () => {
+                                /** I really don't know what to do here. Sorry for violating React.*/
+                                if (data.common.picture !== undefined) {
+                                    let coverBlob = new Blob([selectCover(data.common.picture).data.buffer])
+                                    document.getElementById("AlbumCover").style.backgroundImage = `url(${URL.createObjectURL(coverBlob)})`;
+                                    setForm({
+                                        ...form,
+                                        name: data.common.title,
+                                        albumName: data.common.album,
+                                        artist: data.common.albumartist === undefined
+                                            ? data.common.artist
+                                            : data.common.albumartist,
+                                        file: obj.target.files[0],
 
+                                        albumCover: reader.result,
+                                    })
+                                }else{
+                                    setForm({
+                                        ...form,
+                                        name: data.common.title,
+                                        albumName: data.common.album,
+                                        artist: data.common.albumartist === undefined
+                                            ? data.common.artist
+                                            : data.common.albumartist,
+                                        file: obj.target.files[0],
+                                    })
+                                }
+                            }
+
+
+                        })
+                        console.log(form)
 
                     }} className={"mb-3 form-control"} type={"file"} name={"file"} accept={"audio/*"}
                     ></input>
@@ -186,6 +252,9 @@ function App() {
                     <input onChange={(obj) => {
                         setForm({
                             ...form, email: obj.target.value
+                        })
+                        setCookie("email", obj.target.value, {
+                            sameSite: "strict",
                         })
                     }} value={form.email} className={"mb-3 form-control"}
                            placeholder={"邮箱（通知何时完毕，可选）"}
