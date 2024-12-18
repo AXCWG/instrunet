@@ -10,40 +10,44 @@ import {useCookies} from "react-cookie";
 // TODO Localizations
 
 
-function Navbar() {
-    return (<nav className="navbar fixed-top navbar-expand-sm bg-dark navbar-dark">
-        <div className="container-fluid">
-            <a className="navbar-brand" href="/">伴奏网</a>
-            <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#collapsibleNavbar">
-                <span className="navbar-toggler-icon"></span>
-            </button>
-            <div className="collapse navbar-collapse" id="collapsibleNavbar">
-                <ul className="navbar-nav">
-                    <li className="nav-item">
-                        <a className="nav-link" href="/">主页</a>
-                    </li>
-                    <li className="nav-item">
-                        <a className="nav-link" href="/search">全部</a>
-                    </li>
-                    <li className="nav-item">
-                        <a className="nav-link" href="mailto:xiey0@qq.com">联系我</a>
-                    </li>
-                    <li className={"nav-item"}>
-                        <a className="nav-link" href="https://afdian.com/a/re_xiey0">如果喜欢本站，请考虑打赏哦</a>
-                    </li>
-                    <li className={"nav-item"}>
-                        <a className="nav-link" href="https://github.com/AXCWG/instrunet">GitHub</a>
-                    </li>
+function Navbar({isFixed}) {
 
-                </ul>
+    return (
+
+        <nav
+            className={isFixed ? "navbar fixed-top navbar-expand-sm bg-dark navbar-dark" : "navbar navbar-expand-sm bg-dark navbar-dark"}>
+            <div className="container-fluid">
+                <a className="navbar-brand" href="/">伴奏网</a>
+                <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapsibleNavbar">
+                    <span className="navbar-toggler-icon"></span>
+                </button>
+                <div className="collapse navbar-collapse" id="collapsibleNavbar">
+                    <ul className="navbar-nav">
+                        <li className="nav-item">
+                            <a className="nav-link" href="/">主页</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="/search">全部</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="mailto:xiey0@qq.com">联系我</a>
+                        </li>
+                        <li className={"nav-item"}>
+                            <a className="nav-link" href="https://afdian.com/a/re_xiey0">如果喜欢本站，请考虑打赏哦</a>
+                        </li>
+                        <li className={"nav-item"}>
+                            <a className="nav-link" href="https://github.com/AXCWG/instrunet">GitHub</a>
+                        </li>
+
+                    </ul>
+                </div>
             </div>
-        </div>
-    </nav>)
+        </nav>)
 }
 
 function App() {
-    const [cookies, setCookie, removeCookie] = useCookies(['InstruNet'], {doNotParse: true})
+    const [cookies, setCookie] = useCookies(['InstruNet'], {doNotParse: true})
     const [form, setForm] = useState({
         name: "",
         albumName: "",
@@ -69,7 +73,6 @@ function App() {
 
         if (form.name !== "" && form.albumName !== "" && form.file.toString() !== "[object Object]" && form.artist !== "") {
             setLoading(true);
-            console.log(form.file.toString())
             const reader = new FileReader();
             reader.readAsDataURL(form.file);
             reader.onload = async () => {
@@ -117,7 +120,7 @@ function App() {
 
 
     return (<>
-
+        <Navbar isFixed={true}/>
         <div className="container mt-5 ">
             <div style={{height: '81vh', display: "flex", justifyContent: "center", flexDirection: "column"}}>
                 <div className="row">
@@ -171,7 +174,8 @@ function App() {
                         height: 200,
                         backgroundSize: "contain"
                     }} id={"AlbumCover"}>
-                        <input type={"file"} style={{height: "100%", width: "100%", color: "transparent", filter: "opacity(0)"}}
+                        <input type={"file"}
+                               style={{height: "100%", width: "100%", color: "transparent", filter: "opacity(0)"}}
                                onChange={(e) => {
                                    document.getElementById("AlbumCover").style.backgroundImage = `url(${URL.createObjectURL(e.target.files[0])})`;
                                    const reader = new FileReader();
@@ -195,8 +199,7 @@ function App() {
 
                         }).then(data => {
                             const reader = new FileReader();
-                            console.log(data)
-                            reader.readAsDataURL(data.common.picture === undefined ? new Blob([]) :  new Blob([selectCover(data.common.picture).data.buffer]))
+                            reader.readAsDataURL(data.common.picture === undefined ? new Blob([]) : new Blob([selectCover(data.common.picture).data.buffer]))
                             reader.onload = () => {
                                 /** I really don't know what to do here. Sorry for violating React.*/
                                 if (data.common.picture !== undefined) {
@@ -213,7 +216,7 @@ function App() {
 
                                         albumCover: reader.result,
                                     })
-                                }else{
+                                } else {
                                     setForm({
                                         ...form,
                                         name: data.common.title,
@@ -228,7 +231,6 @@ function App() {
 
 
                         })
-                        console.log(form)
 
                     }} className={"mb-3 form-control"} type={"file"} name={"file"} accept={"audio/*"}
                     ></input>

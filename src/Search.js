@@ -1,6 +1,7 @@
 import './App.css'
 import {useState} from "react";
 import {baseUrl, Kind} from "./Singletons";
+import {Navbar} from "./App";
 
 const queryParams = new URLSearchParams(window.location.search);
 const p = queryParams.get("p");
@@ -11,21 +12,26 @@ let got_data = await (await fetch(baseUrl + "search_api", {
 
 
 function Cards({data}) {
-    return (<div className={"col-lg-6 mb-3"} key={data.uuid}>
-        <div className={"card"} style={{width: "100%"}} onClick={(e) => {
-            window.location.href = "/player?play=" + data.uuid;
-        }}>
-            <div className={"card-body"}>
-                <div className={"display-6"}>
-                    {data.song_name}
+    return (
+        <>
+            <Navbar isFixed={true}/>
+            <div className={"col-lg-6 mb-3"} key={data.uuid}>
+                <div className={"card cards"} style={{width: "100%"}} onClick={(e) => {
+                    window.location.href = "/player?play=" + data.uuid;
+                }}>
+                    <div className={"card-body"}>
+                        <div className={"display-6 text-wrap"}>
+                            {data.song_name}
 
+                        </div>
+                    </div>
+                    <div className={"card-footer"}>
+                        {data.artist} - {data.album_name} - {Kind[data.kind]}
+                    </div>
                 </div>
             </div>
-            <div className={"card-footer"}>
-                {data.artist} - {data.album_name} - {Kind[data.kind]}
-            </div>
-        </div>
-    </div>)
+        </>
+        )
 }
 
 function Search() {
@@ -38,7 +44,7 @@ function Search() {
     return (
         <>
             <div className="container" style={{marginTop: "5rem"}}>
-                <div className={"display-1"}>
+                <div className={"display-1 user-select-none"}>
                     搜索结果：{p === "" || p === null ? "全部" : p}
                 </div>
                 <div className={"row mt-3"}>
