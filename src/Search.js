@@ -14,7 +14,7 @@ let got_data = await (await fetch(baseUrl + "search_api", {
 function Cards({data}) {
     return (
         <>
-            <Navbar isFixed={true}/>
+
             <div className={"col-lg-6 mb-3"} key={data.uuid}>
                 <div className={"card cards"} style={{width: "100%"}} onClick={(e) => {
                     window.location.href = "/player?play=" + data.uuid;
@@ -43,6 +43,7 @@ function Search() {
     })
     return (
         <>
+            <Navbar isFixed={true}/>
             <div className="container" style={{marginTop: "5rem"}}>
                 <div className={"display-1 user-select-none"}>
                     搜索结果：{p === "" || p === null ? "全部" : p}
