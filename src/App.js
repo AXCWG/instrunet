@@ -2,12 +2,13 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.bundle'
 import 'bootstrap-icons/font/bootstrap-icons.css'
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {parseBlob, selectCover} from 'music-metadata'
-import {baseUrl, Kind} from "./Singletons";
+import {baseUrl, Kind, ncmApiUrl} from "./Singletons";
 import {useCookies} from "react-cookie";
 
 // TODO Localizations
+
 
 
 function Navbar({isFixed}) {
@@ -47,7 +48,9 @@ function Navbar({isFixed}) {
 }
 
 function App() {
+
     const [cookies, setCookie] = useCookies(['InstruNet'], {doNotParse: true})
+
     const [form, setForm] = useState({
         name: "",
         albumName: "",
@@ -68,13 +71,15 @@ function App() {
     function searchGeneral() {
         window.location.href = "/search?p=" + searchParam;
     }
-    async function NetEaseUploadEntry(login=false){
-        if(login){
 
-        }else{
+    async function NetEaseUploadEntry(login = false) {
+        if (login) {
+
+        } else {
             fetch("")
         }
     }
+
     async function UploadEntry() {
 
         if (form.name !== "" && form.albumName !== "" && form.file.toString() !== "[object Object]" && form.artist !== "") {
@@ -309,10 +314,20 @@ function App() {
                             </button>
                         </div>
                         <div className={"tab-pane"} id={"ncm-mode"}>
-                            <input type={"text"} placeholder={"歌曲链接"} className={"mb-3 mt-3 form-control "}/>
-                            <button className={"btn btn-primary w-100"} onClick={()=>{
+                            <label>未授权状态仅可下载（部分）免费歌曲：请<a onClick={(e) => {
 
-                            }}>提交</button>
+                            }}>登录</a></label>
+                            <input type={"text"} placeholder={"歌曲链接"} className={"mb-3 mt-3 form-control "}/>
+                            <button className={"btn btn-primary w-100"} onClick={() => {
+                                fetch(ncmApiUrl + 'register/anonimous?timestamp=' + Date.now()).then(res => {
+                                    fetch(ncmApiUrl+"song/download/url/v1?id=1417442423&level=exhigh&timestamp=" + Date.now()).then(async res => {
+                                        if (res.ok) {
+                                            console.log((await res.json()).data.url)
+                                        }
+                                    })
+                                })
+                            }}>提交
+                            </button>
                         </div>
 
 
