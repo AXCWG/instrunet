@@ -61,6 +61,11 @@ function App() {
         kind: 0,
         albumCover: new ArrayBuffer(0)
     })
+    const[ncmForm, setncmForm] = useState({
+        id: "",
+        email: "",
+        kind: 0,
+    })
 
     const [loading, setLoading] = useState(false);
 
@@ -129,6 +134,16 @@ function App() {
 
     const [searchParam, setSearchParam] = useState("")
 
+    function getJsonFromUrl(url) {
+        if(!url) url = location.search;
+        var query = url.substr(1);
+        var result = {};
+        query.split("&").forEach(function(part) {
+            var item = part.split("=");
+            result[item[0]] = decodeURIComponent(item[1]);
+        });
+        return result;
+    }
 
     return (<>
         <Navbar isFixed={true}/>
@@ -314,16 +329,48 @@ function App() {
                             </button>
                         </div>
                         <div className={"tab-pane"} id={"ncm-mode"}>
-                            <label>未授权状态仅可下载（部分）免费歌曲：请<a onClick={(e) => {
 
-                            }}>登录</a></label>
-                            <input type={"text"} placeholder={"歌曲链接"} className={"mb-3 mt-3 form-control "}/>
+                            <input type={"text"} placeholder={"歌曲链接"} className={"mb-3 mt-3 form-control "} value={ncmForm.id} onChange={(e) => {
+                                setncmForm({
+                                    ...ncmForm,
+                                    id: getJsonFromUrl(e.target.value).id,
+
+                                })
+                            }}/>
+                            <input onChange={(obj) => {
+                                setForm({
+                                    ...form, email: obj.target.value
+                                })
+                                setCookie("email", obj.target.value, {
+                                    sameSite: "strict",
+                                })
+                            }} value={form.email} className={"mb-3 form-control"}
+                                   placeholder={"邮箱（通知何时完毕，可选）"} type="email"
+                            />
+                            <div className={"row mb-3"}>
+                                <div className={"col-lg-2 w-auto"}>
+                                    <div style={{display: "flex", justifyContent: "space-between"}}>
+                                        <select name={"mode"} onChange={(e) => {
+                                            setForm({
+                                                ...form, kind: Number.parseInt(e.target.value)
+                                            })
+                                        }} className={"form-control form-select"} style={{userSelect: "none"}}>
+                                            <option value={0}>{Kind["0"]}</option>
+                                            <option value={1}>{Kind["1"]}</option>
+                                            <option value={3}>{Kind["3"]}</option>
+                                            <option value={4}>{Kind["4"]}</option>
+                                            <option value={0} disabled={true}>更多正在开发中……</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+
+                            </div>
                             <button className={"btn btn-primary w-100"} onClick={() => {
-                                fetch(ncmApiUrl + 'register/anonimous?timestamp=' + Date.now()).then(res => {
-                                    fetch(ncmApiUrl+"song/download/url/v1?id=1417442423&level=exhigh&timestamp=" + Date.now()).then(async res => {
-                                        if (res.ok) {
-                                            console.log((await res.json()).data.url)
-                                        }
+                                fetch(baseUrl+"/ncm/url", {
+                                    method: "POST",
+                                    body: JSON.stringify({
+                                        id: form.id,
                                     })
                                 })
                             }}>提交
