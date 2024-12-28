@@ -355,7 +355,7 @@ function App() {
                             <button className={"btn btn-primary w-100"} onClick={async (e) => {
                                 setLoading(true);
                                 e.currentTarget.disabled = true;
-                                if ((await fetch(baseUrl + "ncm/url", {
+                                let res = (await fetch(baseUrl + "ncm/url", {
                                     method: "POST",
                                     body: JSON.stringify({
                                         id: ncmForm.id,
@@ -363,8 +363,11 @@ function App() {
                                         email: ncmForm.email,
                                     }),
                                     headers: {"Content-Type": "application/json"}
-                                })).ok) {
+                                }))
+                                if (res.ok) {
                                     alert("提交成功")
+                                }else {
+                                    alert(await res.text())
                                 }
                                 e.target.disabled = false;
 
