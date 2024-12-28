@@ -2,16 +2,16 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import Search from "./Search";
 import Player from "./Player";
 
 
-function Tutorial() {
-    return  (
+function PageNotFound() {
+    return (
         <>
             <div className="container">
-                <h1 className={"display-1"}>正在建设中</h1>
+                <h1 className={"display-1"}>正在建设中或不存在该页面</h1>
             </div>
         </>
     )
@@ -23,7 +23,9 @@ root.render(<BrowserRouter>
         <Route path="/" element={<App/>}/>
         <Route path="/search" element={<Search/>}/>
         <Route path="/player" element={<Player/>}/>
-        <Route path={"/ncm_how_to_get_id"} element={<Tutorial/>}/>
+        <Route path="/404" element={<PageNotFound/>}/>
+        <Route path={"*"} element={<Navigate replace to="/404"/>}/>
+
     </Routes>
 </BrowserRouter>);
 
