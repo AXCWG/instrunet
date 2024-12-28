@@ -2,13 +2,12 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.bundle'
 import 'bootstrap-icons/font/bootstrap-icons.css'
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {parseBlob, selectCover} from 'music-metadata'
-import {baseUrl, Kind, ncmApiUrl} from "./Singletons";
+import {baseUrl, Kind} from "./Singletons";
 import {useCookies} from "react-cookie";
 
 // TODO Localizations
-
 
 
 function Navbar({isFixed}) {
@@ -61,9 +60,9 @@ function App() {
         kind: 0,
         albumCover: new ArrayBuffer(0)
     })
-    const[ncmForm, setncmForm] = useState({
+    const [ncmForm, setncmForm] = useState({
         id: "",
-        email: "",
+        email: cookies["email"],
         kind: 0,
     })
 
@@ -77,13 +76,6 @@ function App() {
         window.location.href = "/search?p=" + searchParam;
     }
 
-    async function NetEaseUploadEntry(login = false) {
-        if (login) {
-
-        } else {
-            fetch("")
-        }
-    }
 
     async function UploadEntry() {
 
@@ -134,16 +126,6 @@ function App() {
 
     const [searchParam, setSearchParam] = useState("")
 
-    function getJsonFromUrl(url) {
-        if(!url) url = location.search;
-        var query = url.substr(1);
-        var result = {};
-        query.split("&").forEach(function(part) {
-            var item = part.split("=");
-            result[item[0]] = decodeURIComponent(item[1]);
-        });
-        return result;
-    }
 
     return (<>
         <Navbar isFixed={true}/>
@@ -330,29 +312,33 @@ function App() {
                         </div>
                         <div className={"tab-pane"} id={"ncm-mode"}>
 
-                            <input type={"text"} placeholder={"歌曲链接"} className={"mb-3 mt-3 form-control "} value={ncmForm.id} onChange={(e) => {
+                            <input type={"text"} placeholder={"歌曲ID（网易云网页端地址中“id”参数）"}
+                                   className={"mb-3 mt-3 form-control "} value={ncmForm.id} onChange={(e) => {
                                 setncmForm({
                                     ...ncmForm,
-                                    id: getJsonFromUrl(e.target.value).id,
+                                    id: e.target.value,
 
                                 })
                             }}/>
+                            <a href={"/ncm_how_to_get_id"}>如何寻找？</a>
                             <input onChange={(obj) => {
-                                setForm({
-                                    ...form, email: obj.target.value
+                                setncmForm({
+                                    ...ncmForm,
+                                    email: obj.target.value,
                                 })
                                 setCookie("email", obj.target.value, {
                                     sameSite: "strict",
                                 })
-                            }} value={form.email} className={"mb-3 form-control"}
+                            }} value={ncmForm.email} className={"mb-3 form-control"}
                                    placeholder={"邮箱（通知何时完毕，可选）"} type="email"
                             />
                             <div className={"row mb-3"}>
                                 <div className={"col-lg-2 w-auto"}>
                                     <div style={{display: "flex", justifyContent: "space-between"}}>
                                         <select name={"mode"} onChange={(e) => {
-                                            setForm({
-                                                ...form, kind: Number.parseInt(e.target.value)
+                                            setncmForm({
+                                                ...ncmForm,
+                                                kind: Number.parseInt(e.target.value)
                                             })
                                         }} className={"form-control form-select"} style={{userSelect: "none"}}>
                                             <option value={0}>{Kind["0"]}</option>
@@ -366,13 +352,23 @@ function App() {
                                 </div>
 
                             </div>
-                            <button className={"btn btn-primary w-100"} onClick={() => {
-                                fetch(baseUrl+"/ncm/url", {
+                            <button className={"btn btn-primary w-100"} onClick={async (e) => {
+                                setLoading(true);
+                                e.currentTarget.disabled = true;
+                                if ((await fetch(baseUrl + "ncm/url", {
                                     method: "POST",
                                     body: JSON.stringify({
-                                        id: form.id,
-                                    })
-                                })
+                                        id: ncmForm.id,
+                                        kind: ncmForm.kind,
+                                        email: ncmForm.email,
+                                    }),
+                                    headers: {"Content-Type": "application/json"}
+                                })).ok) {
+                                    alert("提交成功")
+                                }
+                                e.target.disabled = false;
+
+                                setLoading(false);
                             }}>提交
                             </button>
                         </div>
