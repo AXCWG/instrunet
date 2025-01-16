@@ -15,7 +15,7 @@ function Cards({data}) {
     return (
         <>
 
-            <div className={"col-lg-6 mb-3"} key={data.uuid}>
+            <div className={"col-lg-6 mb-3"} >
                 <div className={"card cards"} style={{width: "100%"}} onClick={(e) => {
                     window.location.href = "/player?play=" + data.uuid;
                 }}>
@@ -91,7 +91,7 @@ function Search() {
                             if (selected["0"] === true) {
                                 if (data.kind === 0) {
                                     return (
-                                        <Cards data={data}/>
+                                        <Cards data={data} />
                                     )
                                 }
 

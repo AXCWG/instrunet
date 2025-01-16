@@ -58,7 +58,7 @@ function App() {
         email: cookies["email"],
         artist: "",
         kind: 0,
-        albumCover: new ArrayBuffer(0)
+        albumCover: ""
     })
     const [ncmForm, setncmForm] = useState({
         id: "",
@@ -225,6 +225,7 @@ function App() {
                                     reader.readAsDataURL(data.common.picture === undefined ? new Blob([]) : new Blob([selectCover(data.common.picture).data.buffer]))
                                     reader.onload = () => {
                                         /** I really don't know what to do here. Sorry for violating React.*/
+                                        /** Jan 09 25 I really should use useState. Fuck me. **/
                                         if (data.common.picture !== undefined) {
                                             let coverBlob = new Blob([selectCover(data.common.picture).data.buffer])
                                             document.getElementById("AlbumCover").style.backgroundImage = `url(${URL.createObjectURL(coverBlob)})`;
