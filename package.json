@@ -13,6 +13,7 @@
     "cookie-parse": "^0.4.0",
     "ffmetadata": "^1.7.0",
     "gh-pages": "^6.2.0",
+    "html-react-parser": "^5.2.2",
     "jsmediatags": "^3.9.7",
     "music-metadata": "^10.6.4",
     "react": "^18.3.1",
