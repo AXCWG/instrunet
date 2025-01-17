@@ -321,7 +321,7 @@ function App() {
 
                                 })
                             }}/>
-                            <a href={"/ncm_how_to_get_id"}>如何寻找？</a>
+                            <a href={"https://www.bilibili.com/video/BV1Buc8eGEmh/?share_source=copy_web&vd_source=fff871e844f34f38697fc936b8301df5&t=49"}>如何寻找？</a>
                             <input onChange={(obj) => {
                                 setncmForm({
                                     ...ncmForm,
