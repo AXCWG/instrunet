@@ -10,6 +10,6 @@
 
 TODO list: 
 
-- [ ] 歌词
+- [x] <span style="text-decoration: line-through;"> 歌词</span>
 - [ ] 本地化
 - [ ] 可能的更换播放器的选项（这个有点BUG）

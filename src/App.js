@@ -108,9 +108,9 @@ function App() {
                     setLoading(false);
                 })
                 if (res !== undefined) {
-                    if (!res.ok) {
+                    if (res.status===500) {
                         setLoading(false);
-                        alert("格式不支持")
+                        alert("傻逼，重复了。请在盲目上传之前看看库里有没有好么傻逼？")
                     } else {
                         setLoading(false);
                         alert("上传完成，正在分析，将在5-30分钟内在数据库中出现")
