@@ -30,6 +30,9 @@ function Navbar({isFixed}) {
                         <li className="nav-item">
                             <a className="nav-link" href="/search">全部</a>
                         </li>
+                        <li className={"nav-item"}>
+                            <a className="nav-link" href="/query">处理队列</a>
+                        </li>
                         <li className="nav-item">
                             <a className="nav-link" href="mailto:xiey0@qq.com">联系我</a>
                         </li>

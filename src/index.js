@@ -5,7 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import Search from "./Search";
 import Player from "./Player";
-
+import Query from "./Query";
 
 function PageNotFound() {
     return (
@@ -23,6 +23,7 @@ root.render(<BrowserRouter>
         <Route path="/" element={<App/>}/>
         <Route path="/search" element={<Search/>}/>
         <Route path="/player" element={<Player/>}/>
+        <Route path="/query" element={<Query/>}/>
         <Route path="/404" element={<PageNotFound/>}/>
         <Route path={"*"} element={<Navigate replace to="/404"/>}/>
 
