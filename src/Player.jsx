@@ -14,8 +14,7 @@ let fetchInfo =
 let info = urlParams.get('play') === null ? {} : await fetchInfo.json()
 
 function Player() {
-    const [lyric, setLyric] = useState({ifTrans: true, lyric: "", tlyric: ""});
-    const [currentT, setCurrentT] = useState(false);
+    const [lyric, setLyric] = useState("");
     useEffect(() => {
         async function f() {
             setLyric(await (await fetch(baseUrl + "lyric", {
@@ -28,7 +27,7 @@ function Player() {
                     artist: info.artist,
                     albumName: info.album_name,
                 }),
-            })).json())
+            })).text())
 
 
         }
@@ -89,27 +88,7 @@ function Player() {
                         <div className={" col-xl-6 p-4 "} style={{maxHeight: "93vh"}}>
                             <div className={"lyric-box"}
                                  style={{margin: "auto",  overflow: 'scroll',  display: "flex", flexDirection: "column", maxHeight: "100%"}}>
-                                {lyric.ifTrans ?
-                                    <select className={"form-select mb-2 lyric-box"} onChange={(e) => {
 
-                                        switch (Number.parseInt(e.target.value)) {
-                                            case 0:
-                                                setCurrentT(false)
-                                                break;
-                                            case 1:
-                                                setCurrentT(true)
-                                                break;
-                                            default:
-                                                break;
-                                        }
-                                        console.log(currentT);
-                                    }}>
-                                        <option value={0}>原文
-                                        </option>
-                                        <option value={1}>译文
-                                        </option>
-                                    </select> : null
-                                }
 
                                 <div style={{
                                     width: '100%',
@@ -120,7 +99,7 @@ function Player() {
                                     borderStyle: "solid"
                                 }} className={"bg-light p-5 "}>
                                     {
-                                        currentT ? lyric.tlyric===undefined ? "无" :  parse(lyric.tlyric.replaceAll("\n", "<br>")) : lyric.lyric ===undefined ? "无" :  parse(lyric.lyric.replaceAll("\n", "<br>"))
+                                       parse(lyric.replaceAll("\n", "<br>").replaceAll(new RegExp("\\[[^\\[\\]]*\\]", "g"), ""))
                                     }
                                 </div>
                             </div>
