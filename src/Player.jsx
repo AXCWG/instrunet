@@ -99,7 +99,7 @@ function Player() {
                                     borderStyle: "solid"
                                 }} className={"bg-light p-5 "}>
                                     {
-                                       parse(lyric.replaceAll("\n", "<br>").replaceAll(new RegExp("\\[[^\\[\\]]*\\]", "g"), ""))
+                                       parse(lyric.replaceAll("\n", "<br>").replaceAll(new RegExp("\\[[^\\[\\]]*]", "g"), ""))
                                     }
                                 </div>
                             </div>
