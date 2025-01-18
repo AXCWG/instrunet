@@ -9,25 +9,38 @@ import parse from "html-react-parser";
 const urlParams = new URLSearchParams(window.location.search);
 
 let param = urlParams.get('play');
-let fetchInfo =
-    await fetch(baseUrl + "getSingle?id=" + param)
-let info = urlParams.get('play') === null ? {} : await fetchInfo.json()
 
 function Player() {
-    const [lyric, setLyric] = useState("");
+    const [info, setInfo] = useState({
+        albumcover: null,
+        song_name: "正在加载……",
+        album_name: "",
+        artist: "",
+        kind: null,
+        lyric: ""
+    });
     useEffect(() => {
         async function f() {
-            setLyric(await (await fetch(baseUrl + "lyric", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    name: info.song_name,
-                    artist: info.artist,
-                    albumName: info.album_name,
-                }),
-            })).text())
+            let infos = await (await fetch(baseUrl + "getSingle?id=" + param)).json()
+
+            setInfo({
+                ...info, lyric: await (await fetch(baseUrl + "lyric", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        name: infos.song_name,
+                        artist: infos.artist,
+                        albumName: infos.album_name,
+                    }),
+
+                })).text(), albumcover: infos.albumcover,
+                artist: infos.artist,
+                kind: infos.kind,
+                song_name: infos.song_name,
+                album_name: infos.album_name
+            })
 
 
         }
@@ -87,7 +100,13 @@ function Player() {
                         </div>
                         <div className={" col-xl-6 p-4 "} style={{maxHeight: "93vh"}}>
                             <div className={"lyric-box"}
-                                 style={{margin: "auto",  overflow: 'scroll',  display: "flex", flexDirection: "column", maxHeight: "100%"}}>
+                                 style={{
+                                     margin: "auto",
+                                     overflow: 'scroll',
+                                     display: "flex",
+                                     flexDirection: "column",
+                                     maxHeight: "100%"
+                                 }}>
 
 
                                 <div style={{
@@ -99,7 +118,7 @@ function Player() {
                                     borderStyle: "solid"
                                 }} className={"bg-light p-5 "}>
                                     {
-                                       parse(lyric.replaceAll("\n", "<br>").replaceAll(new RegExp("\\[[^\\[\\]]*]", "g"), ""))
+                                        parse(info.lyric.replaceAll("\n", "<br>").replaceAll(new RegExp("\\[[^\\[\\]]*]", "g"), ""))
                                     }
                                 </div>
                             </div>
