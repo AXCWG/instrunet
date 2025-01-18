@@ -102,7 +102,6 @@ function Player() {
                             <div className={"lyric-box"}
                                  style={{
                                      margin: "auto",
-                                     overflow: 'scroll',
                                      display: "flex",
                                      flexDirection: "column",
                                      maxHeight: "100%"
@@ -112,6 +111,7 @@ function Player() {
                                 <div style={{
                                     width: '100%',
                                     overflow: 'scroll',
+                                    scrollbarWidth: 'none',
                                     borderRadius: ".5rem",
                                     borderColor: "gray",
                                     borderWidth: ".3px",
