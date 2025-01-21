@@ -16,3 +16,10 @@
     }
 
 }
+.right-hand{
+    transition: all 0.15s ease-in-out;
+    color: rgba(var(--bs-secondary-rgb));
+}
+.right-hand:hover{
+    color: rgba(var(--bs-light-rgb));
+}

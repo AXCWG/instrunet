@@ -23,7 +23,7 @@ function Navbar({isFixed}) {
                     <span className="navbar-toggler-icon"></span>
                 </button>
                 <div className="collapse navbar-collapse" id="collapsibleNavbar">
-                    <ul className="navbar-nav">
+                    <ul className="navbar-nav me-auto">
                         <li className="nav-item">
                             <a className="nav-link" href="/">主页</a>
                         </li>
@@ -43,7 +43,12 @@ function Navbar({isFixed}) {
                             <a className="nav-link" href="https://github.com/AXCWG/instrunet">GitHub</a>
                         </li>
 
+
                     </ul>
+                    <div className="d-flex">
+                        <a className={" text-decoration-none me-3 right-hand"} href={"/login"}>登录</a>
+                        <a className={" text-decoration-none me-1 right-hand"} href={"/register"}>注册</a>
+                    </div>
                 </div>
             </div>
         </nav>)
@@ -111,7 +116,7 @@ function App() {
                     setLoading(false);
                 })
                 if (res !== undefined) {
-                    if (res.status===500) {
+                    if (res.status === 500) {
                         setLoading(false);
                         alert("傻逼，重复了。请在盲目上传之前看看库里有没有好么傻逼？")
                     } else {
@@ -370,7 +375,7 @@ function App() {
                                 }))
                                 if (res.ok) {
                                     alert("提交成功")
-                                }else {
+                                } else {
                                     alert(await res.text())
                                 }
                                 e.target.disabled = false;
