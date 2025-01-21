@@ -22,9 +22,8 @@ function Player() {
     useEffect(() => {
         async function f() {
             let infos = await (await fetch(baseUrl + "getSingle?id=" + param)).json()
-
             setInfo({
-                ...info, lyric: await (await fetch(baseUrl + "lyric", {
+                ...info, lyric: (await (await fetch(baseUrl + "lyric", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -35,7 +34,7 @@ function Player() {
                         albumName: infos.album_name,
                     }),
 
-                })).text(), albumcover: infos.albumcover,
+                })).text()).replaceAll(new RegExp("\\[[^\\[\\]]*]", "g"), "").trim().replaceAll("\n", "<br>"), albumcover: infos.albumcover,
                 artist: infos.artist,
                 kind: infos.kind,
                 song_name: infos.song_name,
@@ -118,7 +117,7 @@ function Player() {
                                     borderStyle: "solid"
                                 }} className={"bg-light p-5 "}>
                                     {
-                                        parse(info.lyric.replaceAll("\n", "<br>").replaceAll(new RegExp("\\[[^\\[\\]]*]", "g"), ""))
+                                        parse(info.lyric)
                                     }
                                 </div>
                             </div>
