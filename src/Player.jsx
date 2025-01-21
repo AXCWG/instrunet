@@ -5,7 +5,6 @@ import sampleImg from "./SampleImg.png";
 import {Navbar} from "./App";
 import {useEffect, useState} from "react";
 import parse from "html-react-parser";
-import {useWorker} from "@koale/useworker";
 
 const urlParams = new URLSearchParams(window.location.search);
 
