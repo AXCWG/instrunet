@@ -1,17 +1,14 @@
 import './App.css'
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {baseUrl, Kind} from "./Singletons";
 import {Navbar} from "./App";
 
 const queryParams = new URLSearchParams(window.location.search);
 const p = queryParams.get("p");
-let got_data = await (await fetch(baseUrl + "search_api", {
-    method: "POST",
-    body: JSON.stringify({searchStr: p === null ? "" : p}), headers: {'Content-Type': 'application/json'}
-})).json()
 
 
 function Cards({data}) {
+
     return (
         <>
 
@@ -35,6 +32,18 @@ function Cards({data}) {
 }
 
 function Search() {
+    const [got_data, setGot_data] = useState([]);
+    const [loading, setLoading] = useState(true);
+    useEffect(()=>{
+        async function f(){
+            setGot_data(await (await fetch(baseUrl + "search_api", {
+                method: "POST",
+                body: JSON.stringify({searchStr: p === null ? "" : p}), headers: {'Content-Type': 'application/json'}
+            })).json())
+            setLoading(false);
+        }
+        f()
+    }, [])
     const [selected, setSelected] = useState({
         0: true,
         1: true,
@@ -82,45 +91,50 @@ function Search() {
                 </div>
                 <div className={"mt-5 row"}>
                     {
-                        got_data.map((data) => {
-                            if (
-                                data.song_name === "form.name"
-                            ) {
+                        loading ? <div style={{alignItems: "center"}}>
+                            <span className={"spinner-border"}
+                            ></span><span>正在加载</span>
+
+                            </div> :
+                            got_data.map((data) => {
+                                if (
+                                    data.song_name === "form.name"
+                                ) {
+                                    return null
+                                }
+                                if (selected["0"] === true) {
+                                    if (data.kind === 0) {
+                                        return (
+                                            <Cards data={data}/>
+                                        )
+                                    }
+
+                                }
+                                if (selected["1"] === true) {
+                                    if (data.kind === 1) {
+                                        return (
+                                            <Cards data={data}/>
+                                        )
+                                    }
+                                }
+                                if (selected["3"] === true) {
+                                    if (data.kind === 3) {
+                                        return (
+                                            <Cards data={data}/>
+                                        )
+                                    }
+                                }
+                                if (selected["4"] === true) {
+                                    if (data.kind === 4) {
+                                        return (
+                                            <Cards data={data}/>
+                                        )
+                                    }
+                                }
                                 return null
-                            }
-                            if (selected["0"] === true) {
-                                if (data.kind === 0) {
-                                    return (
-                                        <Cards data={data} />
-                                    )
-                                }
-
-                            }
-                            if (selected["1"] === true) {
-                                if (data.kind === 1) {
-                                    return (
-                                        <Cards data={data}/>
-                                    )
-                                }
-                            }
-                            if (selected["3"] === true) {
-                                if (data.kind === 3) {
-                                    return (
-                                        <Cards data={data}/>
-                                    )
-                                }
-                            }
-                            if (selected["4"] === true) {
-                                if (data.kind === 4) {
-                                    return (
-                                        <Cards data={data}/>
-                                    )
-                                }
-                            }
-                            return null
 
 
-                        })
+                            })
 
 
                     }
