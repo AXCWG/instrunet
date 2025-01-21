@@ -1,6 +1,6 @@
 import H5AudioPlayer from "react-h5-audio-player";
 import 'react-h5-audio-player/lib/styles.css';
-import {baseUrl, fetchUrl, Kind} from "./Singletons";
+import {baseUrl, fetchUrl, Kind, white} from "./Singletons";
 import sampleImg from "./SampleImg.png";
 import {Navbar} from "./App";
 import {useEffect, useState} from "react";
@@ -11,19 +11,24 @@ const urlParams = new URLSearchParams(window.location.search);
 let param = urlParams.get('play');
 
 function Player() {
+
     const [info, setInfo] = useState({
-        albumcover: null,
         song_name: "正在加载……",
         album_name: "",
         artist: "",
         kind: null,
         lyric: ""
     });
+    const [albumcover, setAlbumcover] = useState({data: null, isloading: true})
+
     useEffect(() => {
+
         async function f() {
             let infos = await (await fetch(baseUrl + "getSingle?id=" + param)).json()
+
             setInfo({
-                ...info, lyric: (await (await fetch(baseUrl + "lyric", {
+                ...info,
+                lyric: (await (await fetch(baseUrl + "lyric", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -34,20 +39,27 @@ function Player() {
                         albumName: infos.album_name,
                     }),
 
-                })).text()).replaceAll(new RegExp("\\[[^\\[\\]]*]", "g"), "").trim().replaceAll("\n", "<br>"), albumcover: infos.albumcover,
+                })).text()).replaceAll(new RegExp("\\[[^\\[\\]]*]", "g"), "").trim().replaceAll("\n", "<br>"),
                 artist: infos.artist,
                 kind: infos.kind,
+
                 song_name: infos.song_name,
                 album_name: infos.album_name
             })
 
 
+            setAlbumcover({
+
+                data: (await (await fetch(baseUrl + 'getSingle?albumcover=true&id=' + param)).json()).albumcover,
+                isloading: false
+            })
+
         }
 
         f()
-
     }, [])
-    const cover = info.albumcover === null ? sampleImg : URL.createObjectURL(new Blob([Uint8Array.from(info.albumcover.data).buffer]));
+    const cover = albumcover.isloading ? white : albumcover.data === null ? sampleImg : URL.createObjectURL(new Blob([Uint8Array.from(albumcover.data.data).buffer]));
+
     return (
         <>
             <div className="">
