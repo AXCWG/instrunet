@@ -8,7 +8,7 @@
 
 四个选项：去和声伴奏，和声伴奏，鼓，贝斯
 
-郑重感谢[LrcApi](https://github.com/HisAtri/LrcApi)为本网站提供歌词服务 🫡
+~~郑重感谢[LrcApi](https://github.com/HisAtri/LrcApi)为本网站提供歌词服务 🫡~~ 我还能说什么？
 
 TODO list: 
 

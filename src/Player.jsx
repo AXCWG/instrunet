@@ -39,7 +39,7 @@ function Player() {
                         albumName: infos.album_name,
                     }),
 
-                })).text()).replaceAll(new RegExp("\\[[^\\[\\]]*]", "g"), "").trim().replaceAll("\n", "<br>"),
+                })).text()).replaceAll(new RegExp("\\[[^\\[\\]]*]", "g"), "").trim(),
                 artist: infos.artist,
                 kind: infos.kind,
 
