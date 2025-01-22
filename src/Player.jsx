@@ -17,10 +17,12 @@ function Player() {
         album_name: "",
         artist: "",
         kind: null,
-        lyric: ""
     });
     const [albumcover, setAlbumcover] = useState({data: null, isloading: true})
-
+    const [lyrics, setLyrics] = useState({
+        lyrics: [{lyrics: ""}],
+        selected: 0
+    });
     useEffect(() => {
 
         async function f() {
@@ -28,7 +30,16 @@ function Player() {
 
             setInfo({
                 ...info,
-                lyric: (await (await fetch(baseUrl + "lyric", {
+
+                artist: infos.artist,
+                kind: infos.kind,
+
+                song_name: infos.song_name,
+                album_name: infos.album_name
+            })
+            setLyrics({
+                ...lyrics,
+                lyrics: (await (await fetch(baseUrl + "lyric", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -39,15 +50,8 @@ function Player() {
                         albumName: infos.album_name,
                     }),
 
-                })).text()).replaceAll(new RegExp("\\[[^\\[\\]]*]", "g"), "").trim(),
-                artist: infos.artist,
-                kind: infos.kind,
-
-                song_name: infos.song_name,
-                album_name: infos.album_name
-            })
-
-
+                })).json())
+            });
             setAlbumcover({
 
                 data: (await (await fetch(baseUrl + 'getSingle?albumcover=true&id=' + param)).json()).albumcover,
@@ -57,6 +61,7 @@ function Player() {
         }
 
         f()
+
     }, [])
     const cover = albumcover.isloading ? white : albumcover.data === null ? sampleImg : URL.createObjectURL(new Blob([Uint8Array.from(albumcover.data.data).buffer]));
 
@@ -109,7 +114,19 @@ function Player() {
                                     }}>下载
                             </button>
                         </div>
-                        <div className={" col-xl-6 p-4 "} style={{maxHeight: "93vh"}}>
+                        <div className={" col-xl-6 p-4 "} style={{maxHeight: "87vh"}}>
+                            <select className={"form-select mb-3"} onChange={(e) => {
+                                setLyrics({
+                                    ...lyrics,
+                                    selected: e.target.value
+                                })
+                            }}>
+                                {
+                                    lyrics.lyrics.map((data, i) => {
+                                        return <option value={i} key={i}>{data.title} - {data.artists} - {data.album}</option>
+                                    })
+                                }
+                            </select>
                             <div className={"lyric-box"}
                                  style={{
                                      margin: "auto",
@@ -129,7 +146,7 @@ function Player() {
                                     borderStyle: "solid"
                                 }} className={"bg-light p-5 "}>
                                     {
-                                        parse(info.lyric)
+                                        parse(lyrics.lyrics[lyrics.selected].lyrics.replaceAll(new RegExp("\\[[^\\[\\]]*]", "g"), "").trim().replaceAll("\n", "<br>"))
                                     }
                                 </div>
                             </div>
