@@ -81,21 +81,23 @@ function App() {
 
 
     async function UploadEntry() {
+        if ((form.name === "" || form.name === undefined) || form.file.toString() === "[object Object]") {
+            alert("格式不正确")
 
-        if (form.name !== "" && form.albumName !== "" && form.file.toString() !== "[object Object]" && form.artist !== "") {
+        } else {
             setLoading(true);
             const reader = new FileReader();
             reader.readAsDataURL(form.file);
             reader.onload = async () => {
                 let prep = {
                     name: form.name,
-                    albumName: form.albumName,
+                    albumName: (form.albumName === undefined || form.albumName === "") ? null : form.albumName,
                     link: form.link,
                     file: reader.result,
                     email: form.email,
-                    artist: form.artist,
+                    artist: (form.artist === undefined || form.artist === "") ? null : form.artist,
                     kind: form.kind,
-                    albumCover: form.albumCover,
+                    albumCover: (form.albumCover === undefined || form.albumCover === "") ? null : form.albumCover,
 
 
                 }
@@ -111,7 +113,7 @@ function App() {
                     setLoading(false);
                 })
                 if (res !== undefined) {
-                    if (res.status===500) {
+                    if (res.status === 500) {
                         setLoading(false);
                         alert("傻逼，重复了。请在盲目上传之前看看库里有没有好么傻逼？")
                     } else {
@@ -121,8 +123,6 @@ function App() {
                 }
 
             }
-        } else {
-            alert("格式不正确")
         }
 
     }
@@ -229,16 +229,16 @@ function App() {
                                     reader.onload = () => {
                                         /** I really don't know what to do here. Sorry for violating React.*/
                                         /** Jan 09 25 I really should use useState. Fuck me. **/
-                                        if (data.common.picture !== undefined) {
+                                        if (data.common.picture !== undefined ) {
                                             let coverBlob = new Blob([selectCover(data.common.picture).data.buffer])
                                             document.getElementById("AlbumCover").style.backgroundImage = `url(${URL.createObjectURL(coverBlob)})`;
                                             setForm({
                                                 ...form,
                                                 name: data.common.title,
                                                 albumName: data.common.album,
-                                                artist: data.common.albumartist === undefined
-                                                    ? data.common.artist
-                                                    : data.common.albumartist,
+                                                artist: data.common.artist === undefined
+                                                    ? data.common.albumartist
+                                                    : data.common.artist,
                                                 file: obj.target.files[0],
 
                                                 albumCover: reader.result,
@@ -248,9 +248,9 @@ function App() {
                                                 ...form,
                                                 name: data.common.title,
                                                 albumName: data.common.album,
-                                                artist: data.common.albumartist === undefined
-                                                    ? data.common.artist
-                                                    : data.common.albumartist,
+                                                artist: data.common.artist === undefined
+                                                    ? data.common.albumartist
+                                                    : data.common.artist,
                                                 file: obj.target.files[0],
                                             })
                                         }
@@ -266,13 +266,13 @@ function App() {
                                     ...form, name: obj.target.value,
                                 });
                             }} className={" mb-3 form-control"} placeholder={"曲目名"} name={"name"}/>
-                            <input required={true} onChange={(obj) => {
+                            <input onChange={(obj) => {
                                 setForm({
                                     ...form, albumName: obj.target.value
                                 });
                             }} value={form.albumName} className={"  mb-3 form-control"} placeholder={"所属专辑名"}
                                    name={"albumName"}/>
-                            <input required={true} onChange={(obj) => {
+                            <input onChange={(obj) => {
                                 setForm({
                                     ...form, artist: obj.target.value
                                 })
@@ -370,7 +370,7 @@ function App() {
                                 }))
                                 if (res.ok) {
                                     alert("提交成功")
-                                }else {
+                                } else {
                                     alert(await res.text())
                                 }
                                 e.target.disabled = false;
