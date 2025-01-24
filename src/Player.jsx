@@ -1,6 +1,6 @@
 import H5AudioPlayer from "react-h5-audio-player";
 import 'react-h5-audio-player/lib/styles.css';
-import {baseUrl, fetchUrl, Kind} from "./Singletons";
+import {baseUrl, fetchUrl, Kind, white} from "./Singletons";
 import sampleImg from "./SampleImg.png";
 import {Navbar} from "./App";
 import {useEffect, useState} from "react";
@@ -11,20 +11,35 @@ const urlParams = new URLSearchParams(window.location.search);
 let param = urlParams.get('play');
 
 function Player() {
+
     const [info, setInfo] = useState({
-        albumcover: null,
         song_name: "正在加载……",
         album_name: "",
         artist: "",
         kind: null,
-        lyric: ""
+    });
+    const [albumcover, setAlbumcover] = useState({data: null, isloading: true})
+    const [lyrics, setLyrics] = useState({
+        lyrics: [{lyrics: ""}],
+        selected: 0
     });
     useEffect(() => {
+
         async function f() {
             let infos = await (await fetch(baseUrl + "getSingle?id=" + param)).json()
 
             setInfo({
-                ...info, lyric: await (await fetch(baseUrl + "lyric", {
+                ...info,
+
+                artist: infos.artist,
+                kind: infos.kind,
+
+                song_name: infos.song_name,
+                album_name: infos.album_name
+            })
+            setLyrics({
+                ...lyrics,
+                lyrics: (await (await fetch(baseUrl + "lyric", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -35,20 +50,21 @@ function Player() {
                         albumName: infos.album_name,
                     }),
 
-                })).text(), albumcover: infos.albumcover,
-                artist: infos.artist,
-                kind: infos.kind,
-                song_name: infos.song_name,
-                album_name: infos.album_name
-            })
+                })).json())
+            });
+            setAlbumcover({
 
+                data: (await (await fetch(baseUrl + 'getSingle?albumcover=true&id=' + param)).json()).albumcover,
+                isloading: false
+            })
 
         }
 
         f()
 
     }, [])
-    const cover = info.albumcover === null ? sampleImg : URL.createObjectURL(new Blob([Uint8Array.from(info.albumcover.data).buffer]));
+    const cover = albumcover.isloading ? white : albumcover.data === null ? sampleImg : URL.createObjectURL(new Blob([Uint8Array.from(albumcover.data.data).buffer]));
+
     return (
         <>
             <div className="">
@@ -98,7 +114,19 @@ function Player() {
                                     }}>下载
                             </button>
                         </div>
-                        <div className={" col-xl-6 p-4 "} style={{maxHeight: "93vh"}}>
+                        <div className={" col-xl-6 p-4 "} style={{maxHeight: "87vh"}}>
+                            <select className={"form-select mb-3"} onChange={(e) => {
+                                setLyrics({
+                                    ...lyrics,
+                                    selected: e.target.value
+                                })
+                            }}>
+                                {
+                                    lyrics.lyrics.map((data, i) => {
+                                        return <option value={i} key={i}>{data.title} - {data.artists} - {data.album}</option>
+                                    })
+                                }
+                            </select>
                             <div className={"lyric-box"}
                                  style={{
                                      margin: "auto",
@@ -118,7 +146,7 @@ function Player() {
                                     borderStyle: "solid"
                                 }} className={"bg-light p-5 "}>
                                     {
-                                        parse(info.lyric.replaceAll("\n", "<br>").replaceAll(new RegExp("\\[[^\\[\\]]*]", "g"), ""))
+                                        parse(lyrics.lyrics[lyrics.selected].lyrics.replaceAll(new RegExp("\\[[^\\[\\]]*]", "g"), "").trim().replaceAll("\n", "<br>"))
                                     }
                                 </div>
                             </div>
