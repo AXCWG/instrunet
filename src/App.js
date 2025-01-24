@@ -244,6 +244,7 @@ function App() {
                                                 albumCover: reader.result,
                                             })
                                         } else {
+                                            document.getElementById("AlbumCover").style.backgroundImage = ``;
                                             setForm({
                                                 ...form,
                                                 name: data.common.title,
@@ -252,6 +253,7 @@ function App() {
                                                     ? data.common.albumartist
                                                     : data.common.artist,
                                                 file: obj.target.files[0],
+                                                albumCover: ""
                                             })
                                         }
                                     }
