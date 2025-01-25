@@ -4,9 +4,11 @@ import {fetchUrl, Kind} from "./Singletons";
 
 function Query() {
     const [query, setQuery] = useState([]);
+    const [loading, setLoading] = useState(true);
     useEffect(() => {
         async function f() {
             setQuery(await (await fetch(fetchUrl + "queue")).json())
+            setLoading(false);
         }
 
         f()
@@ -30,30 +32,34 @@ function Query() {
                         </thead>
                         <tbody>
 
-                        {query.length!== 0 ? query.map((item, index) => {
+                        {loading ? <tr>
+                            <td colSpan={5} className={"text-center"}>正在加载</td>
+                        </tr> : query.length !== 0 ? query.map((item, index) => {
 
-                           if (index === 0) {
-                               return (
-                                   <tr key={index} className="table-success">
-                                       <td>{item.name}</td>
-                                       <td>{item.albumName}</td>
-                                       <td>{item.artist}</td>
-                                       <td>{Kind[item.kind]}</td>
-                                       <td>正在处理</td>
-                                   </tr>
-                               )
-                           }else{
-                               return (
-                                   <tr key={index}>
-                                       <td>{item.name}</td>
-                                       <td>{item.albumName}</td>
-                                       <td>{item.artist}</td>
-                                       <td>{Kind[item.kind]}</td>
-                                       <td>队列中</td>
-                                   </tr>
-                               )
-                           }
-                        }) : <tr><td colSpan={5} className={"text-center"}>空</td></tr>}
+                            if (index === 0) {
+                                return (
+                                    <tr key={index} className="table-success">
+                                        <td>{item.name}</td>
+                                        <td>{item.albumName}</td>
+                                        <td>{item.artist}</td>
+                                        <td>{Kind[item.kind]}</td>
+                                        <td>正在处理</td>
+                                    </tr>
+                                )
+                            } else {
+                                return (
+                                    <tr key={index}>
+                                        <td>{item.name}</td>
+                                        <td>{item.albumName}</td>
+                                        <td>{item.artist}</td>
+                                        <td>{Kind[item.kind]}</td>
+                                        <td>队列中</td>
+                                    </tr>
+                                )
+                            }
+                        }) : <tr>
+                            <td colSpan={5} className={"text-center"}>空</td>
+                        </tr>}
 
                         </tbody>
 
