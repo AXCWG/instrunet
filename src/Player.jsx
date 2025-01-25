@@ -63,8 +63,7 @@ function Player() {
         f()
 
     }, [])
-    const cover = albumcover.isloading ? white : albumcover.data === null ? sampleImg : URL.createObjectURL(new Blob([Uint8Array.from(albumcover.data.data).buffer]));
-
+    const cover = albumcover.isloading ? white : (albumcover.data === null || albumcover.data.data.length === 0) ? sampleImg : URL.createObjectURL(new Blob([Uint8Array.from(albumcover.data.data).buffer]));
     return (
         <>
             <div className="">
@@ -115,7 +114,7 @@ function Player() {
                             </button>
                         </div>
                         <div className={" col-xl-6 p-4 "} style={{maxHeight: "87vh"}}>
-                            <select className={"form-select mb-3"} onChange={(e) => {
+                            <select style={{margin: "auto"}} className={"form-select mb-3 select"} onChange={(e) => {
                                 setLyrics({
                                     ...lyrics,
                                     selected: e.target.value
