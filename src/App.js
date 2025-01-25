@@ -117,10 +117,13 @@ function App() {
         window.location.href = "/search?p=" + searchParam;
     }
 
+    const [state, setState] = useState(-1)
 
     async function UploadEntry() {
-        if ((form.name === "" || form.name === undefined) || form.file.toString() === "[object Object]") {
-            alert("格式不正确")
+
+        if (!form.name || form.file.toString() === "[object Object]") {
+            setState(1)
+            // alert("格式不正确")
 
         } else {
             setLoading(true);
@@ -153,10 +156,12 @@ function App() {
                 if (res !== undefined) {
                     if (res.status === 500) {
                         setLoading(false);
-                        alert("傻逼，重复了。请在盲目上传之前看看库里有没有好么傻逼？")
+                        setState(2)
+                        // alert("傻逼，重复了。请在盲目上传之前看看库里有没有好么傻逼？")
                     } else {
                         setLoading(false);
-                        alert("上传完成，正在分析，将在5-30分钟内在数据库中出现")
+                        setState(0)
+                        // alert("上传完成，正在分析，将在5-30分钟内在数据库中出现")
                     }
                 }
 
@@ -167,6 +172,25 @@ function App() {
 
     const [searchParam, setSearchParam] = useState("")
 
+    function Banner() {
+        switch (state) {
+            case -1:
+                return null
+            case 0:
+                return <div className={"alert alert-success"}><strong>上传完成，</strong>正在分析，将在5-30分钟内在数据库中出现
+                </div>
+            case 1:
+                return <div className={"alert alert-warning"}>格式不正确。</div>
+            case 2:
+                return <div className={"alert alert-danger"}>
+                    <strong>傻逼，重复了。请在盲目上传之前看看库里有没有好么傻逼？</strong></div>
+            case 3:
+                return <div className={"alert alert-success"}><strong>提交成功！</strong></div>
+            default:
+                return null
+
+        }
+    }
 
     return (<>
         <Navbar isFixed={true}/>
@@ -185,10 +209,14 @@ function App() {
                             setSearchParam(e.target.value);
                         }} value={searchParam} onKeyDown={(e) => {
                             if (e.key === "Enter") {
+                                setState(-1)
                                 searchGeneral();
                             }
                         }}/>
-                        <button type="button" className="btn btn-primary" onClick={searchGeneral}><i
+                        <button type="button" className="btn btn-primary" onClick={() => {
+                            setState(-1)
+                            searchGeneral()
+                        }}><i
                             className={"bi bi-search"}></i>
                         </button>
                     </form>
@@ -206,7 +234,7 @@ function App() {
                 <h6>全程大概5-30分钟左右。</h6>
             </div>
             <div className={"row mt-5  justify-content-center "} style={{marginBottom: "90px"}}>
-
+                <Banner/>
                 <form className={" px-0"} style={{width: '80%'}} onSubmit={Prevent}>
                     <div style={{visibility: loading ? "visible" : "collapse"}}>
                             <span className={"spinner-border"}
@@ -263,11 +291,11 @@ function App() {
 
                                 }).then(data => {
                                     const reader = new FileReader();
-                                    reader.readAsDataURL(data.common.picture === undefined ? new Blob([]) : new Blob([selectCover(data.common.picture).data.buffer]))
+                                    reader.readAsDataURL(!data.common.picture ? new Blob([]) : new Blob([selectCover(data.common.picture).data.buffer]))
                                     reader.onload = () => {
                                         /** I really don't know what to do here. Sorry for violating React.*/
                                         /** Jan 09 25 I really should use useState. Fuck me. **/
-                                        if (data.common.picture !== undefined ) {
+                                        if (data.common.picture !== undefined) {
                                             let coverBlob = new Blob([selectCover(data.common.picture).data.buffer])
                                             document.getElementById("AlbumCover").style.backgroundImage = `url(${URL.createObjectURL(coverBlob)})`;
                                             setForm({
@@ -287,7 +315,7 @@ function App() {
                                                 ...form,
                                                 name: data.common.title,
                                                 albumName: data.common.album,
-                                                artist: data.common.artist === undefined
+                                                artist: !data.common.artist
                                                     ? data.common.albumartist
                                                     : data.common.artist,
                                                 file: obj.target.files[0],
@@ -349,7 +377,10 @@ function App() {
                             </div>
 
 
-                            <button className={"btn btn-primary mb-3 w-100"} type={"submit"} onClick={UploadEntry}
+                            <button className={"btn btn-primary mb-3 w-100"} type={"submit"} onClick={async () => {
+                                setState(-1)
+                                await UploadEntry()
+                            }}
                                     disabled={loading}><i
                                 className={"bi-upload"}></i> 上传
                             </button>
@@ -397,6 +428,7 @@ function App() {
 
                             </div>
                             <button className={"btn btn-primary w-100"} onClick={async (e) => {
+                                setState(-1)
                                 setLoading(true);
                                 e.currentTarget.disabled = true;
                                 let res = (await fetch(baseUrl + "ncm/url", {
@@ -409,7 +441,8 @@ function App() {
                                     headers: {"Content-Type": "application/json"}
                                 }))
                                 if (res.ok) {
-                                    alert("提交成功")
+                                    setState(3)
+                                    // alert("提交成功")
                                 } else {
                                     alert(await res.text())
                                 }
