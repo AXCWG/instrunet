@@ -15,3 +15,6 @@ TODO list:
 - [x] <span style="text-decoration: line-through;"> 歌词</span> 
 - [ ] 本地化
 - [ ] 可能的更换播放器的选项（这个有点BUG）
+
+## Branch Specific - 关于用户系统
+具体要拿来干嘛，我记得我之前有一个很棒的点子，但是我忘了。

@@ -2,15 +2,41 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.bundle'
 import 'bootstrap-icons/font/bootstrap-icons.css'
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {parseBlob, selectCover} from 'music-metadata'
-import {baseUrl, Kind} from "./Singletons";
+import {baseUrl, fetchUrl, Kind} from "./Singletons";
 import {useCookies} from "react-cookie";
 
 // TODO Localizations
 
 
 function Navbar({isFixed}) {
+   const [login, setLogin] = useState({
+       loggedIn: false,
+       uuid: "",
+       username: "",
+       email: "",
+   });
+    useEffect(()=>{
+        async function f() {
+            let res = await fetch(fetchUrl+"userapi", {
+                credentials: "include",
+            })
+            if(res.ok) {
+                let json = await res.json();
+                setLogin({
+                    loggedIn: true,
+                    uuid: json.uuid,
+                    username: json.username,
+                    email: json.email,
+                })
+            }
+
+        }
+        f()
+    })
+
+
 
     return (
 
@@ -46,8 +72,15 @@ function Navbar({isFixed}) {
 
                     </ul>
                     <div className="d-flex">
-                        <a className={" text-decoration-none me-3 right-hand"} href={"/login"}>登录</a>
-                        <a className={" text-decoration-none me-1 right-hand"} href={"/register"}>注册</a>
+                        {
+                            login.loggedIn ? <a className={"text-decoration-none me-3 right-hand"} href={"/home"}>{login.username}</a>:
+                                <>
+                                    <a className={" text-decoration-none me-3 right-hand"} href={"/login"}>登录</a>
+                                    <a className={" text-decoration-none me-1 right-hand"} href={"/register"}>注册</a>
+                                </>
+
+                        }
+
                     </div>
                 </div>
             </div>

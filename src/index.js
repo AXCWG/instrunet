@@ -8,6 +8,7 @@ import Player from "./Player";
 import Query from "./Query";
 import Login from "./Login";
 import Register from "./Register";
+import Userapi from "./userapi";
 
 function PageNotFound() {
     return (
@@ -18,6 +19,8 @@ function PageNotFound() {
         </>
     )
 }
+
+// TODO: Pending homepage
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<BrowserRouter>
@@ -30,6 +33,7 @@ root.render(<BrowserRouter>
         <Route path="/login" element={<Login />}/>
         <Route path={"/register"} element={<Register/>}/>
         <Route path={"*"} element={<Navigate replace to="/404"/>}/>
+        <Route path={"/userapi"} element={<Userapi/>}/>
 
     </Routes>
 </BrowserRouter>);
