@@ -9,6 +9,7 @@ import Query from "./Query";
 import Login from "./Login";
 import Register from "./Register";
 import Userapi from "./userapi";
+import {fetchUrl} from "./Singletons";
 
 function PageNotFound() {
     return (
@@ -18,6 +19,13 @@ function PageNotFound() {
             </div>
         </>
     )
+}
+
+function Logout() {
+    fetch(fetchUrl + "logout", {
+        credentials: "include",
+    })
+    window.location.href = "/"
 }
 
 // TODO: Pending homepage
@@ -30,10 +38,11 @@ root.render(<BrowserRouter>
         <Route path="/player" element={<Player/>}/>
         <Route path="/query" element={<Query/>}/>
         <Route path="/404" element={<PageNotFound/>}/>
-        <Route path="/login" element={<Login />}/>
+        <Route path="/login" element={<Login/>}/>
         <Route path={"/register"} element={<Register/>}/>
         <Route path={"*"} element={<Navigate replace to="/404"/>}/>
         <Route path={"/userapi"} element={<Userapi/>}/>
+        <Route path={"/logout"} element={<Logout/>}/>
 
     </Routes>
 </BrowserRouter>);
