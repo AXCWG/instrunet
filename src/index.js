@@ -10,6 +10,7 @@ import Login from "./Login";
 import Register from "./Register";
 import Userapi from "./userapi";
 import {fetchUrl} from "./Singletons";
+import Pitched from "./Pitched";
 
 function PageNotFound() {
     return (
@@ -41,6 +42,7 @@ root.render(<BrowserRouter>
         <Route path="/login" element={<Login/>}/>
         <Route path={"/register"} element={<Register/>}/>
         <Route path={"*"} element={<Navigate replace to="/404"/>}/>
+        <Route path={"/pitched-download"} element={<Pitched/>}/>
         <Route path={"/userapi"} element={<Userapi/>}/>
         <Route path={"/logout"} element={<Logout/>}/>
 

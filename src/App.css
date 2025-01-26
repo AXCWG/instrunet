@@ -23,3 +23,9 @@
 .right-hand:hover{
     color: rgba(var(--bs-light-rgb));
 }
+
+.select{
+    @media(max-width: 1200px) {
+        max-width: 500px;
+    }
+}

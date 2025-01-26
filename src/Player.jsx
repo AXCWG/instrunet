@@ -63,8 +63,7 @@ function Player() {
         f()
 
     }, [])
-    const cover = albumcover.isloading ? white : albumcover.data === null ? sampleImg : URL.createObjectURL(new Blob([Uint8Array.from(albumcover.data.data).buffer]));
-
+    const cover = albumcover.isloading ? white : (albumcover.data === null || albumcover.data.data.length === 0) ? sampleImg : URL.createObjectURL(new Blob([Uint8Array.from(albumcover.data.data).buffer]));
     return (
         <>
             <div className="">
@@ -102,20 +101,38 @@ function Player() {
                             <H5AudioPlayer src={fetchUrl + param} autoplay="autoplay" className={"mx-auto mb-3"}
                                            style={{maxWidth: "500px"}}
                             ></H5AudioPlayer>
-                            <button className={"btn btn-light w-100 d-block mx-auto mb-3"}
-                                    style={{
+                            <div className={"row mx-auto"} style={{
+                                maxWidth: "500px"
+                            }}>
+                                <div className={"col-6 d-block mx-auto mb-3"}>
+                                    <button className={"btn btn-light w-100 "}
+                                            style={{
+                                                borderStyle: "solid",
+                                                borderColor: "gray",
+                                                borderWidth: "thin",
+                                                maxWidth: "500px"
+                                            }}
+                                            onClick={() => {
+                                                window.location.href = fetchUrl + param;
+                                            }}>下载
+                                    </button>
+                                </div>
+
+                                <div className={"col-6 d-block mx-auto mb-3"}>
+                                    <button className={"btn btn-light w-100 "} style={{
                                         borderStyle: "solid",
                                         borderColor: "gray",
                                         borderWidth: "thin",
-                                        maxWidth: "500px"
-                                    }}
-                                    onClick={() => {
-                                        window.location.href = fetchUrl + param;
-                                    }}>下载
-                            </button>
+                                    }} onClick={()=>{
+                                        window.location.href = "/pitched-download?id=" + param;
+                                    }}>升降调下载</button>
+                                </div>
+
+                            </div>
+
                         </div>
                         <div className={" col-xl-6 p-4 "} style={{maxHeight: "87vh"}}>
-                            <select className={"form-select mb-3"} onChange={(e) => {
+                            <select style={{margin: "auto"}} className={"form-select mb-3 select"} onChange={(e) => {
                                 setLyrics({
                                     ...lyrics,
                                     selected: e.target.value
@@ -123,7 +140,8 @@ function Player() {
                             }}>
                                 {
                                     lyrics.lyrics.map((data, i) => {
-                                        return <option value={i} key={i}>{data.title} - {data.artists} - {data.album}</option>
+                                        return <option value={i}
+                                                       key={i}>{data.title} - {data.artists} - {data.album}</option>
                                     })
                                 }
                             </select>

@@ -135,13 +135,13 @@ function App() {
             reader.onload = async () => {
                 let prep = {
                     name: form.name,
-                    albumName: (form.albumName === undefined || form.albumName === "") ? null : form.albumName,
+                    albumName: !form.albumName ? null : form.albumName,
                     link: form.link,
                     file: reader.result,
                     email: form.email,
-                    artist: (form.artist === undefined || form.artist === "") ? null : form.artist,
+                    artist: !form.artist ? null : form.artist,
                     kind: form.kind,
-                    albumCover: (form.albumCover === undefined || form.albumCover === "") ? null : form.albumCover,
+                    albumCover: !form.albumCover ? null : form.albumCover,
 
 
                 }
