@@ -6,6 +6,7 @@ import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import Search from "./Search";
 import Player from "./Player";
 import Query from "./Query";
+import Pitched from "./Pitched";
 
 function PageNotFound() {
     return (
@@ -26,6 +27,7 @@ root.render(<BrowserRouter>
         <Route path="/query" element={<Query/>}/>
         <Route path="/404" element={<PageNotFound/>}/>
         <Route path={"*"} element={<Navigate replace to="/404"/>}/>
+        <Route path={"/pitched-download"} element={<Pitched/>}/>
 
     </Routes>
 </BrowserRouter>);
