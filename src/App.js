@@ -11,6 +11,7 @@ import {useCookies} from "react-cookie";
 
 
 function Navbar({isFixed}) {
+    const [loading, setLoading] = useState(true);
    const [login, setLogin] = useState({
        loggedIn: false,
        uuid: "",
@@ -22,6 +23,7 @@ function Navbar({isFixed}) {
             let res = await fetch(fetchUrl+"userapi", {
                 credentials: "include",
             })
+            setLoading(false)
             if(res.ok) {
                 let json = await res.json();
                 setLogin({
@@ -73,6 +75,7 @@ function Navbar({isFixed}) {
                     </ul>
                     <div className="d-flex">
                         {
+                            loading  ? null :
                             login.loggedIn ? <a className={"text-decoration-none me-3 right-hand"} href={"/home"}>{login.username}</a>:
                                 <>
                                     <a className={" text-decoration-none me-3 right-hand"} href={"/login"}>登录</a>
