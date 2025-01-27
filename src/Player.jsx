@@ -26,6 +26,7 @@ function Player() {
     useEffect(() => {
 
         async function f() {
+
             let infos = await (await fetch(baseUrl + "getSingle?id=" + param)).json()
 
             setInfo({
@@ -123,22 +124,24 @@ function Player() {
                                         borderStyle: "solid",
                                         borderColor: "gray",
                                         borderWidth: "thin",
-                                    }} onClick={()=>{
+                                    }} onClick={() => {
                                         window.location.href = "/pitched-download?id=" + param;
-                                    }}>升降调下载</button>
+                                    }}>升降调下载
+                                    </button>
                                 </div>
 
                             </div>
 
                         </div>
                         <div className={" col-xl-6 p-4 "} style={{maxHeight: "87vh"}}>
-                            <select style={{margin: "auto"}} className={"form-select mb-3 select"} onChange={(e) => {
+                            <select style={{margin: "auto"}} className={"form-select mb-3 select "} onChange={(e) => {
                                 setLyrics({
                                     ...lyrics,
                                     selected: e.target.value
                                 })
                             }}>
                                 {
+                                    lyrics.lyrics.length === 0 ? <option>{"无"}</option> :
                                     lyrics.lyrics.map((data, i) => {
                                         return <option value={i}
                                                        key={i}>{data.title} - {data.artists} - {data.album}</option>
@@ -164,7 +167,9 @@ function Player() {
                                     borderStyle: "solid"
                                 }} className={"bg-light p-5 "}>
                                     {
-                                        parse(lyrics.lyrics[lyrics.selected].lyrics.replaceAll(new RegExp("\\[[^\\[\\]]*]", "g"), "").trim().replaceAll("\n", "<br>"))
+                                        lyrics.lyrics.length === 0 ? "未找到歌词" :
+                                            parse(lyrics.lyrics[lyrics.selected].lyrics.replaceAll(new RegExp("\\[[^\\[\\]]*]", "g"), "").trim().replaceAll("\n", "<br>"))
+
                                     }
                                 </div>
                             </div>
