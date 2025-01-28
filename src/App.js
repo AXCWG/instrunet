@@ -145,7 +145,7 @@ function App() {
                 return <div className={"alert alert-warning"}>格式不正确。</div>
             case 2:
                 return <div className={"alert alert-danger"}>
-                    <strong>傻逼，重复了。请在盲目上传之前看看库里有没有好么傻逼？</strong></div>
+                    <strong>和数据库中条目重复</strong></div>
             case 3:
                 return <div className={"alert alert-success"}><strong>提交成功！</strong></div>
             default:
