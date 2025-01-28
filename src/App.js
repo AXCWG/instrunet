@@ -57,7 +57,7 @@ function App() {
         name: "",
         albumName: "",
         link: "",
-        file: {},
+        file: null,
         email: cookies["email"],
         artist: "",
         kind: 0,
@@ -82,9 +82,9 @@ function App() {
     const [state, setState] = useState(-1)
 
     async function UploadEntry() {
-
-        if (!form.name || form.file.toString() === "[object Object]") {
+        if (!form.name || !form.file) {
             setState(1)
+            setLoading(false)
             // alert("格式不正确")
 
         } else {
@@ -248,46 +248,50 @@ function App() {
                             </div>
 
                             <input required={true} onChange={(obj) => {
-                                parseBlob(obj.target.files[0], {
-                                    skipCovers: false,
+                                if(obj.target.files[0] ) {
+                                    parseBlob(obj.target.files[0], {
+                                        skipCovers: false,
 
-                                }).then(data => {
-                                    const reader = new FileReader();
-                                    reader.readAsDataURL(!data.common.picture ? new Blob([]) : new Blob([selectCover(data.common.picture).data.buffer]))
-                                    reader.onload = () => {
-                                        /** I really don't know what to do here. Sorry for violating React.*/
-                                        /** Jan 09 25 I really should use useState. Fuck me. **/
-                                        if (data.common.picture !== undefined) {
-                                            let coverBlob = new Blob([selectCover(data.common.picture).data.buffer])
-                                            document.getElementById("AlbumCover").style.backgroundImage = `url(${URL.createObjectURL(coverBlob)})`;
-                                            setForm({
-                                                ...form,
-                                                name: data.common.title,
-                                                albumName: data.common.album,
-                                                artist: data.common.artist === undefined
-                                                    ? data.common.albumartist
-                                                    : data.common.artist,
-                                                file: obj.target.files[0],
+                                    }).then(data => {
+                                        const reader = new FileReader();
+                                        reader.readAsDataURL(!data.common.picture ? new Blob([]) : new Blob([selectCover(data.common.picture).data.buffer]))
+                                        reader.onload = () => {
+                                            /** I really don't know what to do here. Sorry for violating React.*/
+                                            /** Jan 09 25 I really should use useState. Fuck me. **/
+                                            if (data.common.picture) {
+                                                let coverBlob = new Blob([selectCover(data.common.picture).data.buffer])
+                                                document.getElementById("AlbumCover").style.backgroundImage = `url(${URL.createObjectURL(coverBlob)})`;
+                                                setForm({
+                                                    ...form,
+                                                    name: data.common.title ? data.common.title : null,
+                                                    albumName: data.common.album ? data.common.album : null,
+                                                    artist: !data.common.artist
+                                                        ? data.common.albumartist ? data.common.albumartist : null
+                                                        : data.common.artist ? data.common.artist : null,
+                                                    file: obj.target.files[0],
 
-                                                albumCover: reader.result,
-                                            })
-                                        } else {
-                                            document.getElementById("AlbumCover").style.backgroundImage = ``;
-                                            setForm({
-                                                ...form,
-                                                name: data.common.title,
-                                                albumName: data.common.album,
-                                                artist: !data.common.artist
-                                                    ? data.common.albumartist
-                                                    : data.common.artist,
-                                                file: obj.target.files[0],
-                                                albumCover: ""
-                                            })
+                                                    albumCover: reader.result,
+                                                })
+                                            } else {
+                                                document.getElementById("AlbumCover").style.backgroundImage = ``;
+
+                                                setForm({
+                                                    ...form,
+                                                    name: data.common.title ? data.common.title : "",
+                                                    albumName: data.common.album ? data.common.album : "",
+                                                    artist: !data.common.artist
+                                                        ? data.common.albumartist ? data.common.albumartist : ""
+                                                        : data.common.artist ? data.common.artist : "",
+                                                    file: obj.target.files[0],
+                                                    albumCover: ""
+                                                })
+                                            }
                                         }
-                                    }
 
 
-                                })
+                                    })
+                                }
+
 
                             }} className={"mb-3 form-control"} type={"file"} name={"file"} accept={"audio/*"}
                             ></input>
