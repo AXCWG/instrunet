@@ -1,7 +1,7 @@
 import H5AudioPlayer from "react-h5-audio-player";
 import 'react-h5-audio-player/lib/styles.css';
 import {baseUrl, fetchUrl, Kind, white} from "./Singletons";
-import sampleImg from "./SampleImg.png";
+import sampleImg from "./Assets/SampleImg.png";
 import {Navbar} from "./App";
 import {useEffect, useState} from "react";
 import parse from "html-react-parser";

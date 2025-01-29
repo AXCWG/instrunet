@@ -10,21 +10,21 @@ import {useCookies} from "react-cookie";
 // TODO Localizations
 
 
-function Navbar({isFixed}) {
+function Navbar({isFixed, username}) {
     const [loading, setLoading] = useState(true);
-   const [login, setLogin] = useState({
-       loggedIn: false,
-       uuid: "",
-       username: "",
-       email: "",
-   });
-    useEffect(()=>{
+    const [login, setLogin] = useState({
+        loggedIn: false,
+        uuid: "",
+        username: "",
+        email: "",
+    });
+    useEffect(() => {
         async function f() {
-            let res = await fetch(fetchUrl+"userapi", {
+            let res = await fetch(fetchUrl + "userapi", {
                 credentials: "include",
             })
             setLoading(false)
-            if(res.ok) {
+            if (res.ok) {
                 let json = await res.json();
                 setLogin({
                     loggedIn: true,
@@ -35,15 +35,18 @@ function Navbar({isFixed}) {
             }
 
         }
-        f()
-    }, [])
 
+        if (username===undefined || username===null) {
+            console.log(username);
+            f()
+        }
+    }, [username])
 
 
     return (
 
         <nav
-            className={isFixed ? "navbar fixed-top navbar-expand-sm bg-dark navbar-dark" : "navbar navbar-expand-sm bg-dark navbar-dark"}>
+            className={isFixed ? "navbar fixed-top navbar-expand-sm bg-dark navbar-dark" : "navbar navbar-expand-md bg-dark navbar-dark"}>
             <div className="container-fluid">
                 <a className="navbar-brand" href="/">伴奏网</a>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -75,12 +78,20 @@ function Navbar({isFixed}) {
                     </ul>
                     <div className="d-flex">
                         {
-                            loading  ? null :
-                            login.loggedIn ? <a className={"text-decoration-none me-3 right-hand"} href={"/home"}>{login.username}</a>:
-                                <>
-                                    <a className={" text-decoration-none me-3 right-hand"} href={"/login"}>登录</a>
-                                    <a className={" text-decoration-none me-1 right-hand"} href={"/register"}>注册</a>
-                                </>
+                            !username ?
+                                loading ?
+                                    null :
+                                    login.loggedIn ?
+                                        <a className={"text-decoration-none me-3 right-hand"}
+                                           href={"/home"}>{login.username}</a> :
+                                        <>
+                                            <a className={" text-decoration-none me-3 right-hand"}
+                                               href={"/login"}>登录</a>
+                                            <a className={" text-decoration-none me-1 right-hand"}
+                                               href={"/register"}>注册</a>
+                                        </>
+                                : <a className={"text-decoration-none me-3 right-hand"}
+                                     href={"/home"}>{username}</a>
 
                         }
 
