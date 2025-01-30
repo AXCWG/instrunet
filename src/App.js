@@ -34,10 +34,31 @@ function Navbar({isFixed}) {
                             <a className="nav-link" href="/query">处理队列</a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="mailto:xiey0@qq.com">联系我</a>
+                            <div className={"dropdown "}>
+                                <button className="nav-link dropdown-toggle" type={"button"} data-bs-toggle={"dropdown"}
+                                        aria-expanded={false}>联系我
+                                </button>
+
+                                <ul className={"dropdown-menu"}>
+                                    <li><a className={"dropdown-item"} href={"mailto:xiey0@qq.com"}>邮箱</a></li>
+                                    <li><a className={"dropdown-item"}
+                                           href={"https://message.bilibili.com/?spm_id_from=..0.0#/whisper/mid255413001"}>B站私信</a>
+                                    </li>
+                                    <li><a className={"dropdown-item"}
+                                           href={"https://github.com/AXCWG/instrunet/issues"}>GitHub Issues</a>
+                                    </li>
+
+                                </ul>
+                            </div>
+
                         </li>
                         <li className={"nav-item"}>
-                            <a className="nav-link" href="https://afdian.com/a/re_xiey0">如果喜欢本站，请考虑打赏哦</a>
+
+                            <a className="nav-link text-danger fw-bold "
+                               href="https://afdian.com/a/re_xiey0" aria-expanded={false}>打赏
+                            </a>
+
+
                         </li>
                         <li className={"nav-item"}>
                             <a className="nav-link" href="https://github.com/AXCWG/instrunet">GitHub</a>
@@ -157,6 +178,7 @@ function App() {
     return (<>
         <Navbar isFixed={true}/>
         <div className="container mt-5 ">
+
             <div style={{height: '81vh', display: "flex", justifyContent: "center", flexDirection: "column"}}>
                 <div className="row">
                     <div className={"display-1 text-lg-center mt-5"} style={{userSelect: "none"}}>
@@ -248,7 +270,7 @@ function App() {
                             </div>
 
                             <input required={true} onChange={(obj) => {
-                                if(obj.target.files[0] ) {
+                                if (obj.target.files[0]) {
                                     parseBlob(obj.target.files[0], {
                                         skipCovers: false,
 
