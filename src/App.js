@@ -357,6 +357,7 @@ function App() {
                                             <option value={2}>{Kind["2"]}</option>
                                             <option value={3}>{Kind["3"]}</option>
                                             <option value={4}>{Kind["4"]}</option>
+                                            <option value={5}>{Kind["5"]}</option>
                                             <option value={0} disabled={true}>更多正在开发中……</option>
 
                                         </select>

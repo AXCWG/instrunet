@@ -50,6 +50,7 @@ function Search() {
         2: true,
         3: true,
         4: true,
+        5:true
     })
     return (
         <>
@@ -93,6 +94,13 @@ function Search() {
                         }} type={"checkbox"} id={"4"} className={"form-check-input"}/>
                         <label id={"4l"} htmlFor={"4"} style={{userSelect: "none"}}>{<div
                             id={"4s"}>{Kind["4"]}</div>}</label>
+                    </div>
+                    <div id={"5d"}>
+                        <input checked={selected["5"]} onChange={(e) => {
+                            setSelected({...selected, 5: !selected["5"]});
+                        }} type={"checkbox"} id={"5"} className={"form-check-input"}/>
+                        <label id={"5l"} htmlFor={"5"} style={{userSelect: "none"}}>{<div
+                            id={"5s"}>{Kind["5"]}</div>}</label>
                     </div>
 
 
@@ -141,6 +149,13 @@ function Search() {
                                 }
                                 if (selected["4"] === true) {
                                     if (data.kind === 4) {
+                                        return (
+                                            <Cards data={data}/>
+                                        )
+                                    }
+                                }
+                                if (selected["5"] === true) {
+                                    if (data.kind === 5) {
                                         return (
                                             <Cards data={data}/>
                                         )
