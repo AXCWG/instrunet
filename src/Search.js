@@ -47,6 +47,7 @@ function Search() {
     const [selected, setSelected] = useState({
         0: true,
         1: true,
+        2: true,
         3: true,
         4: true,
     })
@@ -71,6 +72,13 @@ function Search() {
                         }} type={"checkbox"} id={"1"} className={"form-check-input"}/>
                         <label id={"1l"} htmlFor={"1"} style={{userSelect: "none"}}>{<div
                             id={"1s"}>{Kind["1"]}</div>}</label>
+                    </div>
+                    <div id={"2d"}>
+                        <input checked={selected["2"]} onChange={(e) => {
+                            setSelected({...selected, 2: !selected["2"]});
+                        }} type={"checkbox"} id={"2"} className={"form-check-input"}/>
+                        <label id={"2l"} htmlFor={"2"} style={{userSelect: "none"}}>{<div
+                            id={"2s"}>{Kind["2"]}</div>}</label>
                     </div>
                     <div id={"3d"}>
                         <input checked={selected["3"]} onChange={(e) => {
@@ -112,6 +120,13 @@ function Search() {
                                 }
                                 if (selected["1"] === true) {
                                     if (data.kind === 1) {
+                                        return (
+                                            <Cards data={data}/>
+                                        )
+                                    }
+                                }
+                                if (selected["2"] === true) {
+                                    if (data.kind === 2) {
                                         return (
                                             <Cards data={data}/>
                                         )
