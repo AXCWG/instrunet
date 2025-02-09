@@ -13,6 +13,7 @@ import {fetchUrl} from "./Singletons";
 import Pitched from "./Pitched";
 import Home from "./Home";
 import {StrictMode} from "react";
+import AccountDeletion from "./AccountDeletion";
 
 function PageNotFound() {
     return (
@@ -50,6 +51,7 @@ root.render(
                 <Route path={"/userapi"} element={<Userapi/>}/>
                 <Route path={"/logout"} element={<Logout/>}/>
                 <Route path={"/home"} element={<Home/>}/>
+                <Route path={"/AccDel"} element={<AccountDeletion/>}/>
 
             </Routes>
         </BrowserRouter>

@@ -48,15 +48,59 @@ function Home() {
             f()
         }
     }, [login]);
+
+    function Avatar() {
+        const [hover, setHover] = useState(false);
+        return (<>
+            <div onMouseEnter={(e) => {
+                setHover(true);
+            }} onMouseLeave={(e) => {
+                setHover(false)
+
+            }} className={"rounded rounded-circle border-1 border-secondary-subtle border  overflow-hidden"}
+                 style={{
+                     position: "relative", display: "inline-block", pointerEvents: 'visiblePainted',
+                 }}
+            >
+                <div className={"avatar bg-dark"} style={{
+                    position: "absolute",
+                    margin: "auto",
+                    left: 0,
+                    right: 0,
+                    height: "100%",
+                    width: "100%",
+                    zIndex: "999",
+                    opacity: hover ? .5 : 0,
+                    pointerEvents: 'none',
+                }}>
+                    <div style={{
+                        containerType: "inline-size",
+                    }} className={"h-100 w-100 d-flex align-items-center justify-content-center"}>
+                        <input  type={"file"} className={"rounded rounded-circle"} style={{opacity: 0, position: "absolute", width: "100%", height: "100%", pointerEvents: "visiblePainted"}} />
+                        <i className={"bi-camera "} style={{
+                            color: "white",
+                            fontSize: "25cqw",
+
+                        }}></i>
+                    </div>
+                </div>
+                <img
+
+
+                    className={"img-fluid w-auto h-auto  "}
+                    src={avatar ? avatar.byteLength === 0 ? Akkarin : avatar : Akkarin} alt={"avatar"}/>
+            </div>
+        </>)
+    }
+
     return (<>
         <Navbar username={login.username} isFixed={false}/>
-        <div className={"container mt-5"}>
-            <div className={"row"}>
+        <div className={"container  mt-5 "}>
+            <div className={"row "} style={{height: '45rem'}}>
                 <div className={"col-md-6"}>
-                    <div style={{textAlign: "center", userSelect: "none"}} >
-                        <img
-                            className={" img-fluid rounded rounded-circle w-auto h-auto overflow-hidden  border-1 border-secondary-subtle border"}
-                            src={avatar ? avatar.byteLength === 0 ? Akkarin : avatar : Akkarin}/>
+                    <div style={{textAlign: "center", userSelect: "none"}}>
+
+                        <Avatar/>
                         <div className={"display-6 mt-3"}>{login.username}</div>
                         <div className={"mt-3"}>{login.email ? login.email : "未设置邮箱"}</div>
 
@@ -64,7 +108,39 @@ function Home() {
 
 
                 </div>
-                <div className={"col-md-6"}>
+                <div className={"col-md-6 t mt-3 mt-md-0"}>
+                    <div
+                        className={"container h-100 p-3 user-land bg-light rounded-3  border-black border-1 border-opacity-25"}
+                        style={{borderStyle: "solid"}}>
+                        <div>
+                            用户功能
+                        </div>
+                        <div className={"mt-3"} style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            flexWrap: "wrap",
+                            flexDirection: "column",
+                            gap: "1rem",
+                        }}>
+                            <button className={"btn btn-secondary"} onMouseEnter={(e) => {
+                                e.currentTarget.innerText = "暂未开放"
+                            }} onMouseLeave={(e) => {
+                                e.currentTarget.innerText = "歌单"
+                            }}>歌单
+                            </button>
+
+
+                            <button onClick={() => {
+                                window.location.href = "/logout"
+                            }} className={"btn btn-secondary"}>登出
+                            </button>
+                            <button className={"btn btn-danger"} onClick={() => {
+                                window.location.href = "/AccDel"
+                            }}>删除账号
+                            </button>
+
+                        </div>
+                    </div>
 
                 </div>
             </div>
