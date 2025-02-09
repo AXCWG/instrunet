@@ -36,6 +36,7 @@ function Pitched() {
                 <div className={"mt-3"}>{info.artist}</div>
                 <div className={"mt-5"}>当前选择：{pitch}</div>
                 <div className={"alert alert-warning mt-3"}><strong>注意</strong> 这个过程很慢，请耐心等待</div>
+                <div className={"alert alert-danger mt-3"}><strong>不要关闭浏览器，否则不可预料的结果将产生。</strong></div>
                 {
                     loading ? <div className="spinner-border"></div> : null
 
