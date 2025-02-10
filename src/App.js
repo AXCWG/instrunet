@@ -75,10 +75,10 @@ function App() {
     const [cookies, setCookie] = useCookies(['InstruNet'], {doNotParse: true})
 
     const [form, setForm] = useState({
-        name: "",
+        name: "未知名称",
         albumName: "",
         link: "",
-        file: null,
+        file: {},
         email: cookies["email"],
         artist: "",
         kind: 0,
