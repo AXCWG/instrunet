@@ -9,9 +9,13 @@ import parse from "html-react-parser";
 const urlParams = new URLSearchParams(window.location.search);
 
 let param = urlParams.get('play');
+let playlistparam = urlParams.get('playlist');
 
 function Player() {
-
+    const [playlist, setPlaylist] = useState({});
+    useEffect(() => {
+        // TODO fetch playlist
+    }, []);
     const [info, setInfo] = useState({
         song_name: "正在加载……",
         album_name: "",

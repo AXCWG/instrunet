@@ -12,7 +12,7 @@ function Home() {
         email: "",
     });
     const [avatar, setAvatar] = useState(null)
-
+    const [playlist, setPlaylist] = useState([])
     useEffect(() => {
         async function f() {
             let res = await fetch(fetchUrl + "userapi", {
@@ -48,6 +48,18 @@ function Home() {
             f()
         }
     }, [login]);
+    useEffect(()=>{
+        async function f() {
+            setPlaylist(await (await fetch(fetchUrl + "playlist", {
+                method: "POST",
+                credentials: "include",
+            })).json())
+        }
+        if (login.loggedIn) {
+
+            f()
+        }
+    }, [login])
 
     function Avatar() {
         const [hover, setHover] = useState(false);
@@ -122,12 +134,17 @@ function Home() {
                             flexDirection: "column",
                             gap: "1rem",
                         }}>
-                            <button className={"btn btn-secondary"} onMouseEnter={(e) => {
-                                e.currentTarget.innerText = "暂未开放"
-                            }} onMouseLeave={(e) => {
-                                e.currentTarget.innerText = "歌单"
-                            }}>歌单
-                            </button>
+
+                            <div className={"container h-100 p-3 user-land bg-light rounded-3  border-black border-1 border-opacity-25"} style={{borderStyle: "solid"}}>
+                                歌单
+                                <br/>
+                               <div style={{display: "flex", flexDirection: "row"}} className={"mt-2"}>
+                                   {playlist.length === 0 ? null : playlist.map((item, index) => {
+                                        
+                                   })} <button className={"btn btn-primary pl-item"} >添加</button>
+                               </div>
+
+                            </div>
 
 
                             <button onClick={() => {
